@@ -50,6 +50,6 @@
 !.gitignore
 
 !Assets
-!Assets/Scripts
-!Assets/assets
+!Assets/Scripts/*
+!Assets/assets/*
 
