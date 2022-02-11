@@ -50,6 +50,9 @@
 !.gitignore
 
 !Assets
-!Assets/Scripts/*
-!Assets/assets/*
+!Assets/Scripts/
+!Assets/Scripts/**
+!Assets/Scenes/
+!Assets/Scenes/**
+!Assets/assets/**
 
