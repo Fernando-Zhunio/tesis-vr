@@ -8,7 +8,7 @@ using UnityEngine;
 public class VrManager : Conexion
 {
     //PlaceAtLocation placeAtLoacation;
-
+    public LocationPath locationPath;
    
 
     void Start()
