@@ -13,4 +13,6 @@ public class EventModel
     public string end_date;
     public string created_at;
     public string updated_at;
+
+    public bool has_favorited;
 }

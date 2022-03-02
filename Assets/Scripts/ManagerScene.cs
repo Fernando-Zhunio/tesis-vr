@@ -37,6 +37,7 @@ public class ManagerScene : MonoBehaviour
     public static void LoadSceneAuth()
     {
         SceneManager.LoadScene("Auth", LoadSceneMode.Single);
+
     }
 
     public static void LoadSceneHome()

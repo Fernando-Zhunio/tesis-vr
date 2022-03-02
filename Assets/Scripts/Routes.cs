@@ -9,4 +9,6 @@ public class Routes : MonoBehaviour
     public static string login = "auth/login";
     public static string register = "auth/signup";
     public static string events = "events";
+
+    public static string home = "home";
 }

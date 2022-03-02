@@ -3,7 +3,14 @@ guid: 5384fb150cf57f04699a1a1a811e412d
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - notificationManager: {instanceID: 0}
+  - success_icon: {fileID: 21300000, guid: 1c1bef4b40e990c42aed6432ebd324ef, type: 3}
+  - info_icon: {fileID: 21300000, guid: 82852ff66538d44ccb63c5afc39708a5, type: 3}
+  - warning_icon: {fileID: 21300000, guid: 2a19aaadcf7844142a73ce60950ec353, type: 3}
+  - danger_icon: {fileID: 21300000, guid: 2af076b0c7f87eb4ea2720a89b0ba512, type: 3}
+  - prefab_notification: {fileID: 3059982848835308123, guid: 0b0422f200789e645a33f360f51f0d3e,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

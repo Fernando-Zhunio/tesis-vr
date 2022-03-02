@@ -7,41 +7,11 @@ using UnityEngine;
 public class Global : MonoBehaviour
 {
 
-    //private static Global instance = null;
-
-
-    public static Color32 color_success = new Color32(16,144,22, 255) ;
-    public static Color32 color_info = new Color32(16, 95, 144, 255);
-    public static Color32 color_warning = new Color32(179, 161, 13, 255);
-    public static Color32 color_danger = new Color32(239, 39, 24, 255);
 
     public const string keySession = "session";
 
-    public static Hashtable colors = new Hashtable()
-    {
-        { "success", color_success},
-        { "info", color_info},
-        { "warning", color_warning },
-        { "danger", color_danger }
 
-    };
-    public static void ShowAndroidToastMessage(string title, string message, NotificationType notificationType)
-    {
-        //AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        //AndroidJavaObject unityActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
 
-        //if (unityActivity != null)
-        //{
-        //    AndroidJavaClass toastClass = new AndroidJavaClass("android.widget.Toast");
-        //    unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
-        //    {
-        //        AndroidJavaObject toastObject = toastClass.CallStatic<AndroidJavaObject>("makeText", unityActivity, message, 0);
-        //        toastObject.Call("show");
-        //    }));
-        //}
-        NotificationController notificationController = NotificationController.Instance;
-        notificationController.showNotification(title, message, notificationType);
-    }
 
     //public static Global Instance
     //{
@@ -63,7 +33,6 @@ public class Global : MonoBehaviour
         //DontDestroyOnLoad(this.gameObject);
     }
 
-    
     public static Vector2 getLocation()
     {
        float latitud = PlayerPrefs.GetFloat("latitudVr");
@@ -109,7 +78,7 @@ public class Global : MonoBehaviour
         if (PlayerPrefs.HasKey(keySession))
         {
             SessionModel session = JsonUtility.FromJson<SessionModel>(PlayerPrefs.GetString(keySession));
-            return "bearer "+session.access_token;
+            return "Bearer "+session.access_token;
         }
         return null;
     }
@@ -128,5 +97,16 @@ public class Global : MonoBehaviour
         PlayerPrefs.DeleteAll();
         ManagerScene.LoadSceneAuth();
     }
+
+    public static void SetMainCoordinate(string coordinate)
+    {
+        PlayerPrefs.SetString("coordinateMain", coordinate);
+    }
+
+    public static string GetMainCoordinate()
+    {
+        return PlayerPrefs.GetString("coordinateMain");
+    }
+
 }
 

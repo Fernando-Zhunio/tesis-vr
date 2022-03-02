@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class Auth : Conexion
 {
     public Text text_header;
-    [Header("Inputs de login")] 
+    [Header("Inputs de login")]
     public TextMeshProUGUI txt_email;
     public TMP_InputField txt_password;
 
@@ -80,7 +80,7 @@ public class Auth : Conexion
         }
         else
         {
-            Global.ShowAndroidToastMessage("Registro correcto", "Ahora puedes iniciar sesion!", NotificationType.success);
+            NotificationController.ShowToast("Registro exitoso, inicie sesion");
             goLogin();
         }
     }
@@ -103,8 +103,8 @@ public class Auth : Conexion
 
     public void login()
     {
-        //Loading.SetActive(true);
-        Global.ShowAndroidToastMessage("Cargando", "Verificando credenciales", NotificationType.info);
+        // Global.ShowAndroidToastMessage("Cargando", "Verificando credenciales", NotificationType.info);
+        NotificationController.ShowProgressDialog( "Verificando credenciales", "Espere un momento...");
         WWWForm form = new WWWForm();
         form.AddField("email", txt_email.text);
         form.AddField("password", txt_password.text);
@@ -130,6 +130,7 @@ public class Auth : Conexion
     {
         //Loading.SetActive(false);
         //Global._ShowAndroidToastMessage("Credeiciales", "Usuario autenticado con exito", NotificationType.success);
+        NotificationController.HideProgressDialog();
     }
 
 }

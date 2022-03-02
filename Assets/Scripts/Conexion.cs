@@ -8,15 +8,15 @@ public abstract class Conexion : MonoBehaviour
     UnityWebRequest www;
     public abstract void getResponse<T>(T data);
 
-    
-
     public virtual void setHaderRequest(Dictionary<string, string> headers = null, bool isDefaultHeaders = true)
     {
+        NotificationController.ShowToast("Cargando espere ...");
         if (isDefaultHeaders)
         {
             www.SetRequestHeader("Accept", "application/json");
             if (Global.IsAuthenticated())
             {
+                print("token: " + Global.getToken());
                 www.SetRequestHeader("Authorization", Global.getToken());
             }
         }
@@ -39,7 +39,7 @@ public abstract class Conexion : MonoBehaviour
 
     protected IEnumerator CallPostBackend(string uri,WWWForm form = null)
     {
-        print(Enviroment.url + uri);
+        // print(Enviroment.url + uri);
          www = UnityWebRequest.Post(Enviroment.url+uri, form);
         setHaderRequest();
         yield return www.SendWebRequest();
@@ -66,30 +66,40 @@ public abstract class Conexion : MonoBehaviour
     {
         if (www.result != UnityWebRequest.Result.Success)
         {
-
-            ShowValidationErrors(www);
+            ValidationErrors(www);
+            // ShowValidationErrors(www);
+            // print("Error: " + www.error);
+            // NotificationController.ShowToast( www.error);
         }
         else
         {
             getResponse(www.downloadHandler.text);
         }
         HideLoading();
+
     }
 
     protected virtual void HideLoading() { }
 
-    private void ShowValidationErrors(UnityWebRequest www)
+    private void ValidationErrors(UnityWebRequest www)
     {
-        Debug.Log(www.error);
-        if (www.responseCode == 422)
-        {
-            ValidationErrorsModel validationErrorsModel = ValidationErrorsModel.CreateFromJSON(www.downloadHandler.text);
-            Debug.Log(validationErrorsModel.errors);
-
-            Global.ShowAndroidToastMessage("Error de permisos",validationErrorsModel.errors, NotificationType.danger);
-            return;
+        Debug.Log(www.downloadHandler.text);
+        if(www.responseCode == 401){
+            NotificationController.ShowToast("Usuario o contraseña incorrectos");
+            Global.logout();
         }
-        Global.ShowAndroidToastMessage("Error", "Ups! Ocurrio un problema en el servidor, vuelve a intentarlo", NotificationType.danger);
+        else if(www.responseCode == 422){
+            NotificationController.ShowToast("Error de validacion");
+        }
+        else if(www.responseCode == 500){
+            NotificationController.ShowToast("Error de servidor");
+        }
+        else if(www.responseCode == 404){
+            NotificationController.ShowToast("Recurso no encontrado");
+        }
+        else if(www.responseCode == 200){
+            NotificationController.ShowToast("Registro exitoso, inicie sesion");
+        }
     }
 
 }

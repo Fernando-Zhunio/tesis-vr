@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Michsky.UI.ModernUIPack;
 using System;
+[Serializable]
 public class NotificationController : MonoBehaviour
 {
     public Image background;
@@ -12,6 +13,11 @@ public class NotificationController : MonoBehaviour
     public Sprite info_icon;
     public Sprite warning_icon;
     public Sprite danger_icon;
+
+    public GameObject prefab_notification;
+
+
+
 
     public static Hashtable hashtable_icons = new Hashtable();
 
@@ -24,23 +30,34 @@ public class NotificationController : MonoBehaviour
         hashtable_icons.Add("warning", warning_icon);
         hashtable_icons.Add("danger", danger_icon);
     }
-    
-    public void setColorBackground(NotificationType notificationType)
-    {
-        Color32 _color = (Color32)Global.colors[notificationType.ToString()];
-        //print(nameof(notificationType));
-        background.color = _color;
-    }
 
-    public void showNotification(string title, string description,NotificationType notificationType)
+
+    // public void showNotification(string title, string description, NotificationType notificationType)
+    // {
+    // AndroidNativeFunctions.ShowAlert(title, description, "Aceptar", "Cancelar", "Cerrar", responseAlert);
+    //PrefabNotification prefabNotification = prefab_notification.GetComponent<PrefabNotification>();
+    //prefabNotification.setTitle(title);
+    //prefabNotification.setDescription(description);
+    //prefabNotification.setImage(hashtable_icons[notificationType.ToString()] as Sprite);
+
+    //GameObject parentCanvas = GameObject.FindGameObjectWithTag("Canvas");
+    //var clone = Instantiate(prefab_notification, parentCanvas.transform);
+    //Destroy(clone, 4.0f);
+
+    //notificationManager.title = title;
+    //notificationManager.description = description;
+    //notificationManager.icon = hashtable_icons[notificationType.ToString()] as Sprite;
+    //setColorBackground(notificationType);
+    //notificationManager.OpenNotification();
+    // }
+
+    public void responseAlert(DialogInterface dialogInterface)
     {
-        notificationManager.title = title;
-        notificationManager.description = description;
-        //print(Enum.GetName( typeof(NotificationType),notificationType));
-        //print(notificationType.ToString());
-        notificationManager.icon = hashtable_icons[notificationType.ToString()] as Sprite;
-        setColorBackground(notificationType);
-        notificationManager.OpenNotification();
+        print("responseAlert");
+        string res = dialogInterface == DialogInterface.Positive ? "Aceptar" : "Cancelar";
+#if DEVELOPMENT_BUILD
+        AndroidNativeFunctions.ShowToast(res);
+#endif
     }
 
 
@@ -66,10 +83,44 @@ public class NotificationController : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(this.gameObject);
     }
+
+
+    public static void ShowToast(string message)
+    {
+#if DEVELOPMENT_BUILD
+        AndroidNativeFunctions.ShowToast(message);
+#endif 
+
+    }
+
+    public static void ShowToast(string message, bool shortDuration)
+    {
+#if DEVELOPMENT_BUILD
+        AndroidNativeFunctions.ShowToast(message, shortDuration);
+#endif 
+
+    }
+
+    public static void HideProgressDialog()
+    {
+#if DEVELOPMENT_BUILD
+        AndroidNativeFunctions.HideProgressDialog();
+#endif 
+
+    }
+
+    public static void ShowProgressDialog(string message, string title = "")
+    {
+#if DEVELOPMENT_BUILD
+        AndroidNativeFunctions.ShowProgressDialog(message, title);
+#endif 
+    }
+
+
 }
 
 public enum NotificationType
 {
-    success,info,warning,danger
+    success, info, warning, danger
 }
 
