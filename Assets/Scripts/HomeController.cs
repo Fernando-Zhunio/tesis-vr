@@ -38,7 +38,8 @@ public class HomeController : Conexion
         stadisticsEvents.SetData(homeData.eventsFavoriteCount, 0);
 
         // Si no se asigna no se muestra el mapa
-        Global.SetMainCoordinate($"{mainEvent.position[0]},{mainEvent.position[1]}");
+        Location location = new Location(mainEvent.position[1], mainEvent.position[0]);
+        Global.SetEventMap(mainEvent);
     }
 
     public override void getResponse<T>(T _data)

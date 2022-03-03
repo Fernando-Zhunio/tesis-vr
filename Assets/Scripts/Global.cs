@@ -33,11 +33,11 @@ public class Global : MonoBehaviour
         //DontDestroyOnLoad(this.gameObject);
     }
 
-    public static Vector2 getLocation()
+    public static Location getLocation()
     {
-       float latitud = PlayerPrefs.GetFloat("latitudVr");
-       float longitud = PlayerPrefs.GetFloat("longitudVr");
-       return new Vector2(latitud, longitud);
+       double latitud = PlayerPrefs.GetFloat("latitudVr");
+       double longitud = PlayerPrefs.GetFloat("longitudVr");
+       return new Location(latitud, longitud);
     }
 
     public static string getEventId()
@@ -50,10 +50,13 @@ public class Global : MonoBehaviour
          PlayerPrefs.SetString("EventId", id.ToString());
     }
 
-    public static void setLocation(float latitud, float longitud)
+
+
+    public static void setLocation(Location location)
     {
-        PlayerPrefs.SetFloat("latitudVr",latitud);
-        PlayerPrefs.SetFloat("longitudVr", longitud);
+        PlayerPrefs.SetString("locationVR", location.latitud + "," + location.longitud);
+        // PlayerPrefs.SetString("latitudVr", location.latitud);
+        // PlayerPrefs.SetString("longitudVr", location.longitud);
     }
 
     public static void SetSession(SessionModel sessionModel)
@@ -98,14 +101,31 @@ public class Global : MonoBehaviour
         ManagerScene.LoadSceneAuth();
     }
 
-    public static void SetMainCoordinate(string coordinate)
+    public static void SetEventMap(EventModel _event)
     {
-        PlayerPrefs.SetString("coordinateMain", coordinate);
+        PlayerPrefs.SetString("EventMap", JsonUtility.ToJson(_event));
+        // string _location = location.latitud + "," + location.longitud;
+        // PlayerPrefs.SetString("locationMain", _location);
     }
 
-    public static string GetMainCoordinate()
+    public static Location GetLocationEventMap(){
+        if (PlayerPrefs.HasKey("EventMap"))
+        {
+            EventModel eventModel = JsonUtility.FromJson<EventModel>(PlayerPrefs.GetString("EventMap"));
+            return new Location(eventModel.position[1], eventModel.position[0]);
+        }
+        return null;
+    }
+
+    public static EventModel GetEventMap()
     {
-        return PlayerPrefs.GetString("coordinateMain");
+        if (PlayerPrefs.HasKey("EventMap"))
+        {
+            EventModel _event = JsonUtility.FromJson<EventModel>(PlayerPrefs.GetString("EventMap"));
+            return _event;
+        }
+        return null;
+        // return PlayerPrefs.GetString("locationMain");
     }
 
 }

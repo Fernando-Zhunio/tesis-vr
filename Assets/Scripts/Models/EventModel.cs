@@ -7,7 +7,7 @@ public class EventModel
     public string name;
     public string description;
     public string image;
-    public float[] position;
+    public double[] position;
     public int status;
     public string start_date;
     public string end_date;

@@ -46,12 +46,12 @@ public class ManagerPages : MonoBehaviour
             print(latestPage);
             if (latestPage == "Map")
             {
-                print(Global.GetMainCoordinate());
-                if (!string.IsNullOrEmpty(Global.GetMainCoordinate()) )
+                print(Global.GetEventMap());
+                if (Global.GetEventMap()  != null)
                 {
                     print("Mapa");
-                    string coordinate = Global.GetMainCoordinate();
-                    EnableMap(coordinate);
+                    // string coordinate = Global.GetMainCoordinate();
+                    EnableMap();
                 } else {
                     NotificationController.ShowToast("No hay eventos por el momento");
                 }
@@ -67,7 +67,7 @@ public class ManagerPages : MonoBehaviour
     }
 }
 
-public void EnableMap(string coordinate)
+public void EnableMap()
 {
     backgroundImage.enabled = false;
     MapContainer.SetActive(true);

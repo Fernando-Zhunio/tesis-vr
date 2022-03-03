@@ -20,7 +20,7 @@ public class ManagerMap : MonoBehaviour
     float _spawnScale = 100f;
 
     [SerializeField]
-    string location;
+     public string location;
     Vector2d _location;
 
     GameObject instance;
@@ -30,45 +30,25 @@ public class ManagerMap : MonoBehaviour
     void OnEnable()
     {
         Debug.Log("PrintOnEnable: script was enabled");
+        location = Global.GetLocationEventMap().GetLatLonString();
+        EventModel eventModel = Global.GetEventMap();
+        _markerPrefab.transform.Find("TextMesh").GetComponent<TextMesh>().text = eventModel.name;
         instance = Instantiate(_markerPrefab);
+        _map.Options.locationOptions.latitudeLongitude = location;
+        print(location);
         _location = Conversions.StringToLatLon(location);
 
         instance.transform.localPosition = _map.GeoToWorldPosition(_location, true);
         instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
-
-        // string locations = Global.GetMainCoordinate();
-        // _resource.Query = locations;
-        // MapboxAccess.Instance.Geocoder.Geocode(_resource,)
     }
 
-    public void SetLocation(string location)
-    {
-        _location = Conversions.StringToLatLon(location);
-    }
 
     // Update is called once per frame
     private void Update()
     {
         instance.transform.localPosition = _map.GeoToWorldPosition(_location, true);
         instance.transform.localScale = new Vector3(_spawnScale, _spawnScale, _spawnScale);
-
     }
-
-    void HandleGeocoderResponse(ForwardGeocodeResponse res)
-		{
-			// // _hasResponse = true;
-			// if (null == res)
-			// {
-			// 	_inputField.text = "no geocode response";
-			// }
-			// else if (null != res.Features && res.Features.Count > 0)
-			// {
-			// 	var center = res.Features[0].Center;
-			// 	_coordinate = res.Features[0].Center;
-			// }
-			// Response = res;
-			// OnGeocoderResponse(res);
-		}
 
 
 }

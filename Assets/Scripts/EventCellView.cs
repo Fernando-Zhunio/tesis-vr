@@ -17,8 +17,8 @@ public class EventCellView : MonoBehaviour
     public Button btnSuscripted;
     public Button btnDetail;
 
-    public float lat;
-    public float lng;
+    public double lat;
+    public double lng;
     public bool isActive;
     public int id;
 
@@ -32,8 +32,6 @@ public class EventCellView : MonoBehaviour
         isActive = eventModel.status == 1 ? true : false;
         lat = eventModel.position[0];
         lng = eventModel.position[1];
-
-        //btnVr.GetComponent<Button>().onClick.AddListener(() =>goVr());
     }
 
 
@@ -44,7 +42,8 @@ public class EventCellView : MonoBehaviour
         GameObject canvasHome = GameObject.FindGameObjectWithTag("CanvasHome");
         canvasHome.SetActive(false);
         mainCam.SetActive(false);
-        Global.setLocation(lat, lng);
+        Location location = new Location(lat, lng);
+        Global.setLocation(location);
         Global.setEventId(eventModel.id);
         ManagerScene.LoadSceneVr();
     }
