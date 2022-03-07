@@ -39,7 +39,7 @@ public abstract class Conexion : MonoBehaviour
 
     protected IEnumerator CallPostBackend(string uri,WWWForm form = null)
     {
-        // print(Enviroment.url + uri);
+        print(Enviroment.url + uri);
          www = UnityWebRequest.Post(Enviroment.url+uri, form);
         setHaderRequest();
         yield return www.SendWebRequest();

@@ -9,14 +9,14 @@ public class Auth : Conexion
 {
     public Text text_header;
     [Header("Inputs de login")]
-    public TextMeshProUGUI txt_email;
+    public TMP_InputField txt_email;
     public TMP_InputField txt_password;
 
     [Header("Inputs de registro")]
-    public TextMeshProUGUI txt_name_r;
-    public TextMeshProUGUI txt_email_r;
-    public TextMeshProUGUI txt_password_r;
-    public TextMeshProUGUI txt_password_confirmed_r;
+    public TMP_InputField txt_name_r;
+    public TMP_InputField txt_email_r;
+    public TMP_InputField txt_password_r;
+    public TMP_InputField txt_password_confirmed_r;
 
     [Header("Gameobject de login y registro")]
     public GameObject Panel_login;
@@ -46,7 +46,7 @@ public class Auth : Conexion
         if (str.Length > 0)
         {
             txt_birthday.onValueChanged.RemoveAllListeners();
-            if (!char.IsDigit(str[str.Length - 1]) && str[str.Length - 1] != '/' || txt_birthday.text.Length  > 10)
+            if (!char.IsDigit(str[str.Length - 1]) && str[str.Length - 1] != '/' || txt_birthday.text.Length > 10)
             { // Remove Letters
                 txt_birthday.text = str.Remove(str.Length - 1);
                 txt_birthday.caretPosition = txt_birthday.text.Length;
@@ -61,7 +61,7 @@ public class Auth : Conexion
                 else
                 { // Add
                     txt_birthday.text = str;
-                    txt_birthday.caretPosition = txt_birthday.text.Length +1;
+                    txt_birthday.caretPosition = txt_birthday.text.Length + 1;
                 }
             }
             txt_birthday.onValueChanged.AddListener(OnValueChanged);
@@ -71,11 +71,11 @@ public class Auth : Conexion
 
     public override void getResponse<T>(T _data)
     {
-        print("Desde el metodo request:" +_data);
+        print("Desde el metodo request:" + _data);
         if (Panel_login.activeInHierarchy)
         {
-        SessionModel data = JsonUtility.FromJson<SessionModel>(_data.ToString());
-        print(" request:" +data.user.name);
+            SessionModel data = JsonUtility.FromJson<SessionModel>(_data.ToString());
+            print(" request:" + data.user.name);
             Global.SetSession(data);
         }
         else
@@ -104,11 +104,14 @@ public class Auth : Conexion
     public void login()
     {
         // Global.ShowAndroidToastMessage("Cargando", "Verificando credenciales", NotificationType.info);
-        NotificationController.ShowProgressDialog( "Verificando credenciales", "Espere un momento...");
+        NotificationController.ShowProgressDialog("Verificando credenciales", "Espere un momento...");
         WWWForm form = new WWWForm();
         form.AddField("email", txt_email.text);
-        form.AddField("password", txt_password.text);
-        print(txt_email.text + "-" + txt_password.text);
+        // form.AddField("password", txt_password.text);
+        // form.AddField("email", "fzhunio91@hotmail.com");
+        form.AddField("password", "fernando1991");
+        print($"email: '{txt_email.text}' {form.data.ToString()}");
+        print($"password: '{txt_password.text}'");
         StartCoroutine(CallPostBackend(Routes.login, form));
     }
 
