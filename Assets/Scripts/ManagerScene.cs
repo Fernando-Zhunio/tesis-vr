@@ -31,7 +31,7 @@ public class ManagerScene : MonoBehaviour
 
     public static void LoadSceneVr()
     {
-        SceneManager.LoadScene("ARLocation", LoadSceneMode.Additive);
+        SceneManager.LoadScene("AR", LoadSceneMode.Additive);
     }
 
     public static void LoadSceneAuth()
