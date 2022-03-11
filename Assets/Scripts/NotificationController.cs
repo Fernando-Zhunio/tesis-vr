@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.Events;
+
 [Serializable]
 public class NotificationController : MonoBehaviour
 {
@@ -13,6 +15,8 @@ public class NotificationController : MonoBehaviour
     public Sprite danger_icon;
 
     public GameObject prefab_notification;
+
+    public static UnityAction action;
 
 
 
@@ -87,16 +91,14 @@ public class NotificationController : MonoBehaviour
     {
 //#if DEVELOPMENT_BUILD
         AndroidNativeFunctions.ShowToast(message);
-//#endif 
-
+//#endif
     }
 
     public static void ShowToast(string message, bool shortDuration)
     {
 //#if DEVELOPMENT_BUILD
         AndroidNativeFunctions.ShowToast(message, shortDuration);
-//#endif 
-
+//#endif
     }
 
     public static void HideProgressDialog()
@@ -104,16 +106,21 @@ public class NotificationController : MonoBehaviour
 //#if DEVELOPMENT_BUILD
         AndroidNativeFunctions.HideProgressDialog();
 //#endif
-
     }
 
     public static void ShowProgressDialog(string message, string title = "")
     {
 //#if DEVELOPMENT_BUILD
         AndroidNativeFunctions.ShowProgressDialog(message, title);
-//#endif 
+//#endif
     }
 
+    public static void ShowAlert(string message,  string title , UnityAction<DialogInterface> action, string positiveButton = "Aceptar", string negativeButton = "Cancelar", string neutralButton = "Cerrar")
+    {
+//#if DEVELOPMENT_BUILD
+        AndroidNativeFunctions.ShowAlert(message, title, "Aceptar", "Cancelar", "Cerrar", action);
+//#endif
+    }
 
 }
 

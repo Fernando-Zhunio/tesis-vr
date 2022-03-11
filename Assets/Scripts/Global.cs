@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class Global : MonoBehaviour
 
 
     public const string keySession = "session";
+    private static Location location_ug_center = new Location(-2.181452614962342, -79.89844529968079);
 
 
 
@@ -104,8 +106,6 @@ public class Global : MonoBehaviour
     public static void SetEventMap(EventModel _event)
     {
         PlayerPrefs.SetString("EventMap", JsonUtility.ToJson(_event));
-        // string _location = location.latitud + "," + location.longitud;
-        // PlayerPrefs.SetString("locationMain", _location);
     }
 
     public static Location GetLocationEventMap(){
@@ -125,7 +125,11 @@ public class Global : MonoBehaviour
             return _event;
         }
         return null;
-        // return PlayerPrefs.GetString("locationMain");
+    }
+
+    public static Location GetLocationUG()
+    {
+       return location_ug_center;
     }
 
 }

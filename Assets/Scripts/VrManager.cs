@@ -9,6 +9,9 @@ public class VrManager : Conexion
 
     //public CustomDialogController dialogController;
     public PlaceAtLocation placeAtLocation;
+    public Transform arrowObject;
+
+    public Location locationUG = Global.GetLocationUG();
 
     void Start()
     {
@@ -72,12 +75,12 @@ public class VrManager : Conexion
             // If the connection succeeded, this retrieves the device's current location and displays it in the Console window.
             string message = "Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " + Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " + Input.location.lastData.timestamp;
             NotificationController.ShowToast(message);
+
             updatePointVr(Input.location.lastData.latitude, Input.location.lastData.longitude, Input.location.lastData.altitude);
 
-            //string url = $"events/{Global.getEventId()}/waypoints?lng={Input.location.lastData.longitude}&lat={Input.location.lastData.latitude}";
-            //StartCoroutine(CallGetBackend(url));
+            string url = $"events/{Global.getEventId()}/waypoints?lng={Input.location.lastData.longitude}&lat={Input.location.lastData.latitude}";
+            StartCoroutine(CallGetBackend(url));
         }
-
         // Stops the location service if there is no need to query location updates continuously.
         Input.location.Stop();
     }
@@ -88,12 +91,38 @@ public class VrManager : Conexion
         {
             Latitude = lat,
             Longitude = lng,
-            // Altitude = alt,
+            Altitude = 0,
             AltitudeMode = AltitudeMode.DeviceRelative
         };
-
-        // var placeAtLocation = GetComponent<PlaceAtLocation>();
         placeAtLocation.Location = newLocation;
+    }
+
+     private void Update() {
+         float bearing = angleFromCoordinate(Input.location.lastData.latitude, Input.location.lastData.longitude,
+             locationUG.latitudDouble,locationUG.longitudDouble);
+         
+         arrowObject.rotation = Quaternion.Slerp(arrowObject.rotation, Quaternion.Euler(0,  Input.compass.magneticHeading + bearing, 0), 100f);
+    }
+
+    private float angleFromCoordinate(double _lat1, double _long1, double _lat2, double _long2)
+    {
+        float lat1 = float.Parse(_lat1.ToString());
+        float long1 = float.Parse(_long1.ToString());
+        float lat2 = float.Parse(_lat2.ToString());
+        float long2 = float.Parse(_long2.ToString());
+        lat1 *= Mathf.Deg2Rad;
+        lat2 *= Mathf.Deg2Rad;
+        long1 *= Mathf.Deg2Rad;
+        long2 *= Mathf.Deg2Rad;
+
+        float dLon = (long2 - long1);
+        float y = Mathf.Sin(dLon) * Mathf.Cos(lat2);
+        float x = (Mathf.Cos(lat1) * Mathf.Sin(lat2)) - (Mathf.Sin(lat1) * Mathf.Cos(lat2) * Mathf.Cos(dLon));
+        float brng = Mathf.Atan2(y, x);
+        brng = Mathf.Rad2Deg * brng;
+        brng = (brng + 360) % 360;
+        brng = 360 - brng;
+        return brng;
     }
 
 

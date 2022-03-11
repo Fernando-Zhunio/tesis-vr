@@ -12,7 +12,7 @@ public class HomeController : Conexion
     public ProfileUser profileUser;
     public BestEvent bestEvent;
     public StadisticsEvents stadisticsEvents;
-    public GameObject mainCam; 
+    public GameObject mainCam;
     public GameObject canvasHome;
     // public GameObject canvasAr;
 
@@ -67,15 +67,13 @@ public class HomeController : Conexion
 
     public void closeSceneVr()
     {
-        // GameObject mainCam = GameObject.FindGameObjectWithTag("MainCamera");
-        // GameObject canvasHome = GameObject.FindGameObjectWithTag("CanvasHome");
-        // GameObject canvasAr = GameObject.FindGameObjectWithTag("CanvasAr");
-        // canvasAr.SetActive(false);
         canvasHome.SetActive(true);
         mainCam.SetActive(true);
         ManagerScene.closeSceneAr();
     }
 }
+
+
 
 [System.Serializable]
 public class HomeModel
