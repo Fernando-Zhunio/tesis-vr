@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using Michsky.UI.ModernUIPack;
 using System;
 [Serializable]
 public class NotificationController : MonoBehaviour
 {
     public Image background;
-    public NotificationManager notificationManager;
     public Sprite success_icon;
     public Sprite info_icon;
     public Sprite warning_icon;
@@ -55,9 +53,9 @@ public class NotificationController : MonoBehaviour
     {
         print("responseAlert");
         string res = dialogInterface == DialogInterface.Positive ? "Aceptar" : "Cancelar";
-#if DEVELOPMENT_BUILD
+//#if DEVELOPMENT_BUILD
         AndroidNativeFunctions.ShowToast(res);
-#endif
+//#endif
     }
 
 
@@ -87,40 +85,40 @@ public class NotificationController : MonoBehaviour
 
     public static void ShowToast(string message)
     {
-#if DEVELOPMENT_BUILD
+//#if DEVELOPMENT_BUILD
         AndroidNativeFunctions.ShowToast(message);
-#endif 
+//#endif 
 
     }
 
     public static void ShowToast(string message, bool shortDuration)
     {
-#if DEVELOPMENT_BUILD
+//#if DEVELOPMENT_BUILD
         AndroidNativeFunctions.ShowToast(message, shortDuration);
-#endif 
+//#endif 
 
     }
 
     public static void HideProgressDialog()
     {
-#if DEVELOPMENT_BUILD
+//#if DEVELOPMENT_BUILD
         AndroidNativeFunctions.HideProgressDialog();
-#endif 
+//#endif
 
     }
 
     public static void ShowProgressDialog(string message, string title = "")
     {
-#if DEVELOPMENT_BUILD
+//#if DEVELOPMENT_BUILD
         AndroidNativeFunctions.ShowProgressDialog(message, title);
-#endif 
+//#endif 
     }
 
 
 }
 
-public enum NotificationType
-{
-    success, info, warning, danger
-}
+// public enum NotificationType
+// {
+//     success, info, warning, danger
+// }
 

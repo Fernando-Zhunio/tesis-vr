@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using UnityEngine.Networking;
+using KDTree;
 
 public class EventCellView : MonoBehaviour
 {
@@ -23,6 +24,10 @@ public class EventCellView : MonoBehaviour
     public int id;
 
     public EventModel eventModel;
+
+    // public GameObject mainCamera;
+    // public GameObject canvasHome;
+    // public GameObject canvasAr;
     public void SetData(EventModel data)
     {
         eventModel = data;
@@ -37,11 +42,16 @@ public class EventCellView : MonoBehaviour
 
     public void goVr()
     {
-        print("voy a vr");
-        GameObject mainCam = GameObject.FindGameObjectWithTag("MainCamera");
+        // print("voy a vr");
+        // DistanceFunctions distance = new DistanceFunctions();
+        // double _distance = distance.Distance(lat, lng);
+        
+        GameObject mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         GameObject canvasHome = GameObject.FindGameObjectWithTag("CanvasHome");
+        // GameObject canvasAr = GameObject.FindGameObjectWithTag("CanvasAr");
+        // canvasAr.SetActive(true);
         canvasHome.SetActive(false);
-        mainCam.SetActive(false);
+        mainCamera.SetActive(false);
         Location location = new Location(lat, lng);
         Global.setLocation(location);
         Global.setEventId(eventModel.id);
@@ -61,7 +71,7 @@ public class EventCellView : MonoBehaviour
         if (request.isNetworkError || request.isHttpError)
             Debug.Log(request.error);
         else
-        image.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+            image.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
     }
 }
 

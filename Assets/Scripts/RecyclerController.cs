@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using EnhancedUI;
-using EnhancedUI.EnhancedScroller;
 
 public class RecyclerController : Conexion
 {
@@ -11,7 +9,6 @@ public class RecyclerController : Conexion
     public GameObject content;
     public EventCellView eventCellViewPrefab;
 
-    public EventLoadingCellView loadingCellViewPrefab;
 
     //public int cellHeight;
 

@@ -2,40 +2,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using ARLocation;
+using ARLocation;
 //[RequireComponent(typeof(PlaceAtLocation))]
 public class VrManager : Conexion
 {
 
     //public CustomDialogController dialogController;
-   
+    public PlaceAtLocation placeAtLocation;
 
     void Start()
     {
-        
-        //string url = $"events/{Global.getEventId()}/waypoints?lng=-79.95392&lat=-2.1200896";
-        //print(url);
         StartCoroutine(getPosition());
-        //dialogController.OnResult.AddListener(ResultDialog);
-        //ShowDialog("Test", "Description");
     }
 
     public override void getResponse<T>(T data)
     {
         Debug.Log("waypoints:" + data);
         double[][,] waypoints = JsonUtility.FromJson<double[][,]>(data.ToString());
-        //var newLocation = new Location()
-        //{
-        //    Altitude = 10,
-        //    AltitudeMode = AltitudeMode.GroundRelative
-        //};
-        //var placeAtLocation = GetComponent<PlaceAtLocation>();
-        //placeAtLocation.Location = newLocation;
     }
 
     void setLocations()
     {
-        
+
     }
 
     IEnumerator getPosition()
@@ -46,8 +34,8 @@ public class VrManager : Conexion
         if (!Input.location.isEnabledByUser)
         {
             print("la localizacion esta desabilitada");
-            //Global.ShowAndroidToastMessage("Error", "Ubicacion desabilitada", NotificationType.danger);
-            ShowDialog("Error", "Ubicacion desabilitada");
+            // ShowDialog("Error", "Ubicacion desabilitada");
+            NotificationController.ShowToast("Ubicación deshabilitada");
             yield break;
         }
 
@@ -75,17 +63,16 @@ public class VrManager : Conexion
         // If the connection failed this cancels location service use.
         if (Input.location.status == LocationServiceStatus.Failed)
         {
-            //Global.ShowAndroidToastMessage("Error", "Ubicacion desabilitada", NotificationType.danger);
-            ShowDialog("Error", "Ubicacion desabilitada tiempo agotado");
+            NotificationController.ShowToast("Ubicación deshabilitada tiempo agotado");
             print("Unable to determine device location");
             yield break;
         }
         else
         {
             // If the connection succeeded, this retrieves the device's current location and displays it in the Console window.
-            //print();
             string message = "Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " + Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " + Input.location.lastData.timestamp;
-            ShowDialog("Success", message);
+            NotificationController.ShowToast(message);
+            updatePointVr(Input.location.lastData.latitude, Input.location.lastData.longitude, Input.location.lastData.altitude);
 
             //string url = $"events/{Global.getEventId()}/waypoints?lng={Input.location.lastData.longitude}&lat={Input.location.lastData.latitude}";
             //StartCoroutine(CallGetBackend(url));
@@ -95,18 +82,19 @@ public class VrManager : Conexion
         Input.location.Stop();
     }
 
-
-    public void ShowDialog(string title, string message)
+    public void updatePointVr(double lat, double lng, double alt)
     {
-        //if(dialogController)
-        //{
-        //    dialogController.title = title;
-        //    dialogController.message = message;
-        //    dialogController.Show();
-        //}
+        var newLocation = new ARLocation.Location()
+        {
+            Latitude = lat,
+            Longitude = lng,
+            // Altitude = alt,
+            AltitudeMode = AltitudeMode.DeviceRelative
+        };
+
+        // var placeAtLocation = GetComponent<PlaceAtLocation>();
+        placeAtLocation.Location = newLocation;
     }
-
-
 
 
 }

@@ -12,6 +12,9 @@ public class HomeController : Conexion
     public ProfileUser profileUser;
     public BestEvent bestEvent;
     public StadisticsEvents stadisticsEvents;
+    public GameObject mainCam; 
+    public GameObject canvasHome;
+    // public GameObject canvasAr;
 
     void Awake()
     {
@@ -40,7 +43,9 @@ public class HomeController : Conexion
             // Si no se asigna no se muestra el mapa
             Location location = new Location(mainEvent.position[1], mainEvent.position[0]);
             Global.SetEventMap(mainEvent);
-        } else {
+        }
+        else
+        {
             NotificationController.ShowToast("No hay eventos disponibles");
         }
 
@@ -58,6 +63,17 @@ public class HomeController : Conexion
     public void closeSession()
     {
         Global.logout();
+    }
+
+    public void closeSceneVr()
+    {
+        // GameObject mainCam = GameObject.FindGameObjectWithTag("MainCamera");
+        // GameObject canvasHome = GameObject.FindGameObjectWithTag("CanvasHome");
+        // GameObject canvasAr = GameObject.FindGameObjectWithTag("CanvasAr");
+        // canvasAr.SetActive(false);
+        canvasHome.SetActive(true);
+        mainCam.SetActive(true);
+        ManagerScene.closeSceneAr();
     }
 }
 
