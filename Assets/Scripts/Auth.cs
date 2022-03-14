@@ -71,6 +71,7 @@ public class Auth : Conexion
 
     public override void getResponse<T>(T _data)
     {
+        
         print("Desde el metodo request:" + _data);
         if (Panel_login.activeInHierarchy)
         {
@@ -117,7 +118,8 @@ public class Auth : Conexion
 
     public void register()
     {
-        Loading.SetActive(true);
+        // Loading.SetActive(true);
+        NotificationController.ShowProgressDialog("Creando usuario", "Espere un momento...");
         WWWForm form = new WWWForm();
         form.AddField("name", txt_name_r.text);
         form.AddField("email", txt_email_r.text);

@@ -152,11 +152,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 21743992}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 212dce36ac0819a43bdac5afb855a3b4, type: 3}
+  m_Script: {fileID: 11500000, guid: 922b3fd80274bd64980976211156160f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  txt_lat_lng: {fileID: 0}
-  objToMove: {fileID: 0}
+  PathSettings:
+    LocationPath: {fileID: 11400000, guid: 59ca5496449458c44ab7e8641babe345, type: 2}
+    SplineSampleCount: 250
+    LineRenderer: {fileID: 198029382}
+  PlacementSettings:
+    AltitudeMode: 1
+    MaxNumberOfLocationUpdates: 4
 --- !u!114 &21743994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -254,7 +259,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!120 &198029382
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -361,7 +366,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 198029381}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.00977841, y: -0.26021278, z: 1.8945526}
+  m_LocalPosition: {x: 0.04, y: 1.78, z: 1.8945526}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -385,7 +390,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &286189182
 Transform:
   m_ObjectHideFlags: 0
@@ -974,7 +979,6 @@ MonoBehaviour:
       longitudDouble: 0
     distance1: 0
     distance2: 0
-  renderPathLine: {fileID: 0}
 --- !u!1 &1291144584
 GameObject:
   m_ObjectHideFlags: 0
@@ -999,14 +1003,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1291144584}
-  m_LocalRotation: {x: 0.010496676, y: 0.9731223, z: -0.23003636, w: 0.002481309}
+  m_LocalRotation: {x: 0.23003636, y: -0.002481309, z: 0.010496676, w: 0.9731223}
   m_LocalPosition: {x: -0.009778414, y: -0.81, z: 1.6}
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_Children:
   - {fileID: 2029285428}
   m_Father: {fileID: 1149066862}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 26.6, y: 180, z: 1.236}
+  m_LocalEulerAnglesHint: {x: 26.6, y: 0, z: 1.236}
 --- !u!114 &1291144586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1037,7 +1041,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1334539483
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1053,10 +1057,10 @@ RectTransform:
   m_Father: {fileID: 871824673}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 30}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 145.9261, y: -100.76502}
+  m_SizeDelta: {x: 291.8522, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1334539484
 MonoBehaviour:
@@ -1170,7 +1174,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1364872929
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1186,10 +1190,10 @@ RectTransform:
   m_Father: {fileID: 871824673}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 30}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 145.9261, y: -15}
+  m_SizeDelta: {x: 291.8522, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1364872930
 MonoBehaviour:
@@ -1404,7 +1408,6 @@ GameObject:
   - component: {fileID: 1430060461}
   - component: {fileID: 1430060460}
   - component: {fileID: 1430060459}
-  - component: {fileID: 1430060462}
   m_Layer: 0
   m_Name: AR Session Origin
   m_TagString: Untagged
@@ -1455,25 +1458,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1430060462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1430060458}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 922b3fd80274bd64980976211156160f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PathSettings:
-    LocationPath: {fileID: 11400000, guid: 888f4ee3461eb574bba435ccf7eec5d4, type: 2}
-    SplineSampleCount: 250
-    LineRenderer: {fileID: 198029382}
-  PlacementSettings:
-    AltitudeMode: 1
-    MaxNumberOfLocationUpdates: 4
 --- !u!1001 &1458766976
 PrefabInstance:
   m_ObjectHideFlags: 0
