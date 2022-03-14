@@ -69,9 +69,8 @@ public abstract class Conexion : MonoBehaviour
         if (www.result != UnityWebRequest.Result.Success)
         {
             ValidationErrors(www);
-            // ShowValidationErrors(www);
             print("Error: " + www.error);
-            // NotificationController.ShowToast( www.error);
+            
         }
         else
         {
@@ -109,30 +108,32 @@ public abstract class Conexion : MonoBehaviour
     }
 
 
-    protected IEnumerator CallGetBackend(string url, Action<string> callback)
+    protected IEnumerator CallGetBackend(string url, Action<string> callback, Action<string> callbackError)
     {
 
         www = UnityWebRequest.Get(url);
         setHaderRequest();
         yield return www.SendWebRequest();
-        Response(www, callback);
+        Response(www, callback, callbackError);
     }
 
-    protected void HttpGet(string path, Action<string> callback)
+    protected void HttpGet(string path, Action<string> callback, Action<string> callbackError = null)
     {
         string url = Enviroment.url + path;
         print("HttpGet: " + url);
-        StartCoroutine(CallGetBackend(url, callback));
+        StartCoroutine(CallGetBackend(url, callback, callbackError));
     }
 
-    private void Response(UnityWebRequest www, Action<string> callback)
+    private void Response(UnityWebRequest www, Action<string> callback, Action<string> callbackError)
     {
         if (www.result != UnityWebRequest.Result.Success)
         {
             ValidationErrors(www);
             // ShowValidationErrors(www);
             print("Error: " + www.error);
-            // NotificationController.ShowToast( www.error);
+            NotificationController.ShowToast( www.error);
+            callbackError(www.downloadHandler.text);
+            
         }
         else
         {

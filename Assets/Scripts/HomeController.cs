@@ -17,10 +17,6 @@ public class HomeController : Conexion
     public GameObject mainCam;
     public GameObject canvasHome;
 
-    // GameObject contentCurrent;
-    // public bool isGetFavorite = false;
-    // public GameObject canvasAr;
-
     void Awake()
     {
         _data = new List<ScrollerData>();

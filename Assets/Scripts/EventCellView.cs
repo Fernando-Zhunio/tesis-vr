@@ -52,21 +52,19 @@ public class EventCellView : Conexion
             imageFavorite.sprite = notFavorite;
         }
         location = new Location(data.position[0], data.position[1]);
-        // isActive = eventModel.status == 1 ? true : false;
-        // lat = eventModel.position[0];
-        // lng = eventModel.position[1];
     }
 
 
     public void goVr()
     {
-        StartCoroutine(getPosition());
+        // StartCoroutine(getPosition());
+        double lat = -2.1609372664849325;
+        double lng = -79.89925870340669;
+        goVrApproved(lat, lng);
+
     }
 
-    // public void suscribed()
-    // {
-    //     StartCoroutine(suscribe());
-    // }
+
 
     public void getImage(string url)
     {
@@ -77,7 +75,7 @@ public class EventCellView : Conexion
     {
         string url = Routes.eventfavorite(id);
         print(url);
-       StartCoroutine( CallPostBackend(url, null));
+        StartCoroutine(CallPostBackend(url, null));
     }
 
     IEnumerator DownloadImage(string url)
@@ -135,9 +133,6 @@ public class EventCellView : Conexion
             string message = "Location: " + Input.location.lastData.latitude + " " + Input.location.lastData.longitude + " " + Input.location.lastData.altitude + " " + Input.location.lastData.horizontalAccuracy + " " + Input.location.lastData.timestamp;
             NotificationController.ShowToast(message);
             goVrApproved(Input.location.lastData.latitude, Input.location.lastData.longitude);
-
-            //string url = $"events/{Global.getEventId()}/waypoints?lng={Input.location.lastData.longitude}&lat={Input.location.lastData.latitude}";
-            //StartCoroutine(CallGetBackend(url));
         }
 
         // Stops the location service if there is no need to query location updates continuously.
