@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.Android;
 
 public class HomeController : Conexion
 {
     private List<ScrollerData> _data;
     public GameObject content;
+    public GameObject contentFavorite;
     public EventCellView eventCellViewPrefab;
     [Header("Sections")]
     public ProfileUser profileUser;
@@ -14,6 +16,9 @@ public class HomeController : Conexion
     public StadisticsEvents stadisticsEvents;
     public GameObject mainCam;
     public GameObject canvasHome;
+
+    // GameObject contentCurrent;
+    // public bool isGetFavorite = false;
     // public GameObject canvasAr;
 
     void Awake()
@@ -21,6 +26,18 @@ public class HomeController : Conexion
         _data = new List<ScrollerData>();
         NotificationController.ShowToast("Cargando eventos, espere un momento...");
         StartCoroutine(CallGetBackend(Routes.home));
+    }
+
+    void Start()
+    {
+        if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+        {
+                Permission.RequestUserPermission(Permission.FineLocation);
+        }
+         if (!Permission.HasUserAuthorizedPermission(Permission.Camera))
+        {
+                Permission.RequestUserPermission(Permission.Camera);
+        }
     }
 
 
@@ -49,6 +66,7 @@ public class HomeController : Conexion
             NotificationController.ShowToast("No hay eventos disponibles");
         }
 
+
     }
 
     public override void getResponse<T>(T _data)
@@ -70,6 +88,33 @@ public class HomeController : Conexion
         canvasHome.SetActive(true);
         mainCam.SetActive(true);
         ManagerScene.closeSceneAr();
+    }
+
+    public void getFavorite() {
+            // isGetFavorite = true;
+            // StartCoroutine(CallGetBackend(Routes.getFavorites));
+            HttpGet(Routes.getFavorites, getFavoriteResponse);
+    }
+
+    private void getFavoriteResponse(string _data)
+    {
+        ResponseSuccessModel<EventModel[]> data = JsonUtility.FromJson<ResponseSuccessModel<EventModel[]>>(_data);
+        print(JsonUtility.ToJson(data));
+        if (data.data.Length > 0)
+        {
+            // contentCurrent = contentFavorite;
+            int size = data.data.Length;
+            for (int i = 0; i < size; i++)
+            {
+                eventCellViewPrefab.SetData(data.data[i]);
+                GameObject prefab = Instantiate(eventCellViewPrefab.gameObject, contentFavorite.transform, false);
+                prefab.GetComponent<EventCellView>().getImage(data.data[i].image);
+            }
+        }
+        else
+        {
+            NotificationController.ShowToast("No hay eventos favoritos");
+        }
     }
 }
 

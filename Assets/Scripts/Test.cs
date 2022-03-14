@@ -1,9 +1,20 @@
 using UnityEngine;
 using System;
+using TMPro;
 
 public class Test : MonoBehaviour
 {
     private Location location_ug_center = new Location(-2.181452614962342, -79.89844529968079);
+    public TMP_InputField txt_lat_lng;
+    // public TMP_InputField txt_lng;
+    public Transform objToMove;
+
+    private void Start() {
+        // txt_lat.text = "-2.116278570322586";
+        // txt_lng.text = "-79.95264116085163";
+        // Vector2 local = new Vector2(float.Parse(txt_lat.text), float.Parse(txt_lng.text));
+        // GPSEncoder.SetLocalOrigin(local);
+    }
 
     public void goVrApproved()
     {
@@ -34,4 +45,12 @@ public class Test : MonoBehaviour
 
         return dist;
     }
+
+    // public void moveToLatLng()
+    // {
+    //     Vector2 location = new Vector2(float.Parse(txt_lat.text), float.Parse(txt_lng.text));
+    //     Vector3 usc = GPSEncoder.GPSToUCS(location);
+    //     print(usc);
+    //     objToMove.position = usc;
+    // }
 }

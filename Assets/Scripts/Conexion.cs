@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -31,24 +32,25 @@ public abstract class Conexion : MonoBehaviour
 
     protected IEnumerator CallGetBackend(string uri)
     {
-         www = UnityWebRequest.Get(Enviroment.url+ uri);
+        print("CallGetBackend: " + uri);
+        www = UnityWebRequest.Get(Enviroment.url + uri);
         setHaderRequest();
         yield return www.SendWebRequest();
         Response(www);
     }
 
-    protected IEnumerator CallPostBackend(string uri,WWWForm form = null)
+    protected IEnumerator CallPostBackend(string uri, WWWForm form = null)
     {
         print(Enviroment.url + uri);
-         www = UnityWebRequest.Post(Enviroment.url+uri, form);
+        www = UnityWebRequest.Post(Enviroment.url + uri, form);
         setHaderRequest();
         yield return www.SendWebRequest();
         Response(www);
     }
 
-    protected IEnumerator CallPutBackend(string uri,WWWForm form = null)
+    protected IEnumerator CallPutBackend(string uri, WWWForm form = null)
     {
-         www = UnityWebRequest.Put(Enviroment.url+uri, form?.data);
+        www = UnityWebRequest.Put(Enviroment.url + uri, form?.data);
         setHaderRequest();
         yield return www.SendWebRequest();
         Response(www);
@@ -56,7 +58,7 @@ public abstract class Conexion : MonoBehaviour
 
     protected IEnumerator CallDeleteBackend(string uri)
     {
-         www = UnityWebRequest.Delete(Enviroment.url+uri);
+        www = UnityWebRequest.Delete(Enviroment.url + uri);
         setHaderRequest();
         yield return www.SendWebRequest();
         Response(www);
@@ -68,7 +70,7 @@ public abstract class Conexion : MonoBehaviour
         {
             ValidationErrors(www);
             // ShowValidationErrors(www);
-            // print("Error: " + www.error);
+            print("Error: " + www.error);
             // NotificationController.ShowToast( www.error);
         }
         else
@@ -76,7 +78,6 @@ public abstract class Conexion : MonoBehaviour
             getResponse(www.downloadHandler.text);
         }
         HideLoading();
-
     }
 
     protected virtual void HideLoading() { }
@@ -84,22 +85,59 @@ public abstract class Conexion : MonoBehaviour
     private void ValidationErrors(UnityWebRequest www)
     {
         Debug.Log(www.downloadHandler.text);
-        if(www.responseCode == 401){
+        if (www.responseCode == 401)
+        {
             NotificationController.ShowToast("Usuario o contraseña incorrectos");
             Global.logout();
         }
-        else if(www.responseCode == 422){
-            NotificationController.ShowToast("Error de validacion");
+        else if (www.responseCode == 422)
+        {
+            NotificationController.ShowToast(www.downloadHandler.text);
         }
-        else if(www.responseCode == 500){
+        else if (www.responseCode == 500)
+        {
             NotificationController.ShowToast("Error de servidor");
         }
-        else if(www.responseCode == 404){
+        else if (www.responseCode == 404)
+        {
             NotificationController.ShowToast("Recurso no encontrado");
         }
-        else if(www.responseCode == 200){
+        else if (www.responseCode == 200)
+        {
             NotificationController.ShowToast("Registro exitoso, inicie sesion");
         }
     }
 
+
+    protected IEnumerator CallGetBackend(string url, Action<string> callback)
+    {
+
+        www = UnityWebRequest.Get(url);
+        setHaderRequest();
+        yield return www.SendWebRequest();
+        Response(www, callback);
+    }
+
+    protected void HttpGet(string path, Action<string> callback)
+    {
+        string url = Enviroment.url + path;
+        print("HttpGet: " + url);
+        StartCoroutine(CallGetBackend(url, callback));
+    }
+
+    private void Response(UnityWebRequest www, Action<string> callback)
+    {
+        if (www.result != UnityWebRequest.Result.Success)
+        {
+            ValidationErrors(www);
+            // ShowValidationErrors(www);
+            print("Error: " + www.error);
+            // NotificationController.ShowToast( www.error);
+        }
+        else
+        {
+            callback(www.downloadHandler.text );
+        }
+        HideLoading();
+    }
 }

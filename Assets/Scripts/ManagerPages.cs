@@ -47,12 +47,14 @@ public class ManagerPages : MonoBehaviour
             if (latestPage == "Map")
             {
                 print(Global.GetEventMap());
-                if (Global.GetEventMap()  != null)
+                if (Global.GetEventMap() != null)
                 {
                     print("Mapa");
                     // string coordinate = Global.GetMainCoordinate();
                     EnableMap();
-                } else {
+                }
+                else
+                {
                     NotificationController.ShowToast("No hay eventos por el momento");
                 }
             }
@@ -60,24 +62,26 @@ public class ManagerPages : MonoBehaviour
             {
                 DisableMap();
             }
-        currentPage.gameObject.SetActive(false);
-        currentPage.image.color = Color.white;
 
-        currentPage = pagesDictionary[latestPage];
+
+            currentPage.gameObject.SetActive(false);
+            currentPage.image.color = Color.white;
+
+            currentPage = pagesDictionary[latestPage];
+        }
     }
-}
 
-public void EnableMap()
-{
-    backgroundImage.enabled = false;
-    MapContainer.SetActive(true);
-}
+    public void EnableMap()
+    {
+        backgroundImage.enabled = false;
+        MapContainer.SetActive(true);
+    }
 
-private void DisableMap()
-{
-    backgroundImage.enabled = true;
-    MapContainer.SetActive(false);
-}
+    private void DisableMap()
+    {
+        backgroundImage.enabled = true;
+        MapContainer.SetActive(false);
+    }
 
 }
 

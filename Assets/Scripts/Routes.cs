@@ -10,5 +10,10 @@ public class Routes : MonoBehaviour
     public static string register = "auth/signup";
     public static string events = "events";
 
+    public static string eventfavorite(int id)  { return "events/" + id + "/favorite"; }
+
+    public static string getFavorites = "events/favorites";
+
+    public static string eventWaypoints(int id) { return "events/" + id + "/waypoints"; }
     public static string home = "home";
 }
