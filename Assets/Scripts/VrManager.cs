@@ -1,28 +1,27 @@
 //using ARLocation;
 using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using ARLocation;
 using TMPro;
 //[RequireComponent(typeof(PlaceAtLocation))]
 public class VrManager : Conexion
 {
+    // public PlaceAtLocations placeAtLocations;
     public PlaceAtLocation placeAtLocation;
-    public Transform arrowObject;
+    // public Transform arrowObject;
     public TMP_Text txt_myLocation;
     public TMP_Text txt_distance;
     public TMP_Text txt_info;
     public Location locationUG = Global.GetLocationUG();
-    // public LocationVr locationVr = new LocationVr();
-
+    public LootAt lootAtArrow;
     public Location goLocation = null;
     public Location goLocationSecond = null;
-    private double distance = 0;
-
-
-    // public RenderPathLine renderPathLine;
-
-    // LocationPath path;
+    private double distance = 1000;
+    public Transform targetTranform;
+    public Transform myTransform;
+    public GameObject gameObjectInstantiate;
+    PlaceAtLocation newPlaceAtLocation;
 
 
 
@@ -33,7 +32,8 @@ public class VrManager : Conexion
         // path = renderPathLine.PathSettings.LocationPath;
         // string lat = "-2.1609372664849325".ToString().Replace(",", ".");
         // string lng = "-79.89925870340669".ToString().Replace(",", ".");
-        // string url = $"events/{Global.getEventId()}/waypoints?lng={lng}&lat={lat}";
+        // // string url = $"events/{Global.getEventId()}/waypoints?lng={lng}&lat={lat}";
+        // string url = $"events/2/waypoints?lng={lng}&lat={lat}";
         // txt_info.text = $"Info: {url}";
         // HttpGet(url, ResponseApi, ResponseFail);
 
@@ -69,16 +69,62 @@ public class VrManager : Conexion
 
         Location myLocation = getMyLocation();
         goLocation = new Location(response.data.start_location[1], response.data.start_location[0]);
-        distance = Global.DistanceTo(myLocation.latitudDouble, myLocation.longitudDouble, goLocation.latitudDouble, goLocation.longitudDouble);
+        // distance = Global.DistanceTo(myLocation.latitudDouble, myLocation.longitudDouble, goLocation.latitudDouble, goLocation.longitudDouble);
         if (response.data.end_location != null)
         {
             goLocationSecond = new Location(response.data.end_location[1], response.data.end_location[0]);
+            // instantiatePrefabLocation(goLocationSecond.latitudDouble, goLocationSecond.longitudDouble);
         }
         updatePointVr(goLocation.latitudDouble, goLocation.longitudDouble);
-        txt_distance.text = distance.ToString();
+        // txt_distance.text = distance.ToString();
         txt_info.text += $"punto del waypoint: {placeAtLocation.Location.Latitude}, {placeAtLocation.Location.Longitude}";
         txt_myLocation.text += $"mi posición: {myLocation.latitud}, {myLocation.longitud}";
-        // txt_info.text += "\n point" + placeAtLocation.Location.Latitude + "," + placeAtLocation.Location.Longitude + " distance" + locationVr.distance2;
+
+
+
+        // txt_info.text += "\n waypoints:" + data;
+        // ResponseCustom response = JsonUtility.FromJson<ResponseCustom>(data.ToString());
+        // print(response.success + " - " + response.data.start_location[0].ToString());
+
+        // Location myLocation = getMyLocation();
+        // goLocation = new Location(response.data.start_location[1], response.data.start_location[0]);
+        // var newLocation = new PlaceAtLocation.LocationSettingsData()
+        // {
+        //     LocationInput = new LocationPropertyData()
+        //     {
+        //         LocationInputType = LocationPropertyData.LocationPropertyType.Location,
+        //         Location = new ARLocation.Location()
+        //         {
+        //             Latitude = goLocation.latitudDouble,
+        //             Longitude = goLocation.longitudDouble,
+        //             Altitude = 0,
+        //             AltitudeMode = AltitudeMode.DeviceRelative
+        //         }
+        //     }
+        // };
+        // placeAtLocations.Locations.Add(newLocation);
+        // if (response.data.end_location != null)
+        // {
+        //     goLocationSecond = new Location(response.data.end_location[1], response.data.end_location[0]);
+        //     var newLocationSecond = new PlaceAtLocation.LocationSettingsData()
+        //     {
+        //         LocationInput = new LocationPropertyData()
+        //         {
+        //             LocationInputType = LocationPropertyData.LocationPropertyType.Location,
+        //             Location = new ARLocation.Location()
+        //             {
+        //                 Latitude = goLocationSecond.latitudDouble,
+        //                 Longitude = goLocationSecond.longitudDouble,
+        //                 Altitude = 0,
+        //                 AltitudeMode = AltitudeMode.DeviceRelative
+        //             }
+        //         }
+        //     };
+        //     placeAtLocations.Locations.Add(newLocation);
+        //     // instantiatePrefabLocation(goLocationSecond.latitudDouble, goLocationSecond.longitudDouble);
+        // }
+
+
     }
 
     public void ResponseFail(string data)
@@ -146,17 +192,6 @@ public class VrManager : Conexion
         placeAtLocation.Location = newLocation;
     }
 
-    // private ARLocation.Location generateArLocation(double lat, double lng)
-    // {
-    //     return new ARLocation.Location()
-    //     {
-    //         Latitude = lat,
-    //         Longitude = lng,
-    //         Altitude = 0,
-    //         AltitudeMode = AltitudeMode.DeviceRelative
-    //     };
-    // }
-
     private Location getMyLocation()
     {
         double latitude = Input.location.lastData.latitude;
@@ -167,21 +202,26 @@ public class VrManager : Conexion
     private void Update()
     {
         Location myLocation = getMyLocation();
-        float bearing = angleFromCoordinate(myLocation.latitudDouble, myLocation.longitudDouble, goLocation.latitudDouble, goLocation.longitudDouble);
-        arrowObject.rotation = Quaternion.Slerp(arrowObject.rotation, Quaternion.Euler(0, Input.compass.magneticHeading + bearing, 0), 100f);
-        distance = Global.DistanceTo(myLocation.latitudDouble, myLocation.longitudDouble, goLocation.latitudDouble, goLocation.longitudDouble);
+        // float bearing = angleFromCoordinate(myLocation.latitudDouble, myLocation.longitudDouble, goLocation.latitudDouble, goLocation.longitudDouble);
+        // arrowObject.rotation = Quaternion.Slerp(arrowObject.rotation, Quaternion.Euler(0, Input.compass.magneticHeading + bearing, 0), 100f);
+        // distance = Global.DistanceTo(myLocation.latitudDouble, myLocation.longitudDouble, goLocation.latitudDouble, goLocation.longitudDouble);
+
+
+        // distance = Vector3.Distance(myTransform.position, targetTranform.position);
+        float distance = placeAtLocation.SceneDistance;
+
+
         if (distance < 3)
         {
-            distance = 1000;
-            StartCoroutine(getPosition());
-            if(goLocationSecond != null)
+            if (goLocationSecond != null)
             {
                 goLocation = goLocationSecond;
                 goLocationSecond = null;
             }
-            
+            StartCoroutine(getPosition());
+            // placeAtLocation = newPlaceAtLocation;
         }
-        txt_distance.text = distance.ToString();
+        txt_distance.text = Convert.ToInt32(distance).ToString();
         txt_myLocation.text = $" {myLocation.latitud}, {myLocation.longitud}";
     }
 
@@ -206,12 +246,27 @@ public class VrManager : Conexion
         return brng;
     }
 
-    // public void newLocationGo()
-    // {
-    //     string stringLatLng = txt_lat_lng.text;
-    //     string[] latLng = stringLatLng.Split(',');
-    //     locationUG = new Location(double.Parse(latLng[0]), double.Parse(latLng[1]));
-    // }
+    public void instantiatePrefabLocation(double lat, double lng)
+    {
+        var loc = new ARLocation.Location()
+        {
+            Latitude = lat,
+            Longitude = lng,
+            Altitude = 0,
+            AltitudeMode = AltitudeMode.GroundRelative
+        };
+
+        var opts = new PlaceAtLocation.PlaceAtOptions()
+        {
+            HideObjectUntilItIsPlaced = true,
+            MaxNumberOfLocationUpdates = 2,
+            MovementSmoothing = 0.1f,
+            UseMovingAverage = false
+        };
+
+        newPlaceAtLocation = PlaceAtLocation.AddPlaceAtComponent(gameObjectInstantiate, loc, opts);
+    }
+
 }
 
 // [System.Serializable]
@@ -235,43 +290,3 @@ public class ResponseDataCustom
     public double[] end_location;
     public bool is_end;
 }
-
-// [System.Serializable]
-// public static class JsonUtil {
-
-//     ///< summary > Convert objects to JSON strings < / summary >
-//     ///< param name = "obj" > object < / param >
-//     public static string ToJson<T>(T obj) {
-//         if (obj == null) return "null";
-
-//         if (typeof(T).GetInterface("IList") != null) {
-//             Pack<T> pack = new Pack<T>();
-//             pack.data = obj;
-//             string json = JsonUtility.ToJson(pack);
-//             return json.Substring(8, json.Length - 9);
-//         }
-
-//         return JsonUtility.ToJson(obj);
-//     }
-
-//     ///< summary > parse JSON < / summary >
-//     ///< typeparam name = "t" > type < / typeparam >
-//     ///< param name = "JSON" > JSON string < / param >
-//     public static T FromJson<T>(string json) {
-//         if (json == "null" && typeof(T).IsClass) return default(T);
-
-//         if (typeof(T).GetInterface("IList") != null) {
-//             json = "{\"data\":{data}}".Replace("{data}", json);
-//             Pack<T> Pack = JsonUtility.FromJson<Pack<T>>(json);
-//             return Pack.data;
-//         }
-
-//         return JsonUtility.FromJson<T>(json);
-//     }
-
-//     ///< summary > inner wrapper class < / summary >
-//     private class Pack<T> {
-//         public T data;
-//     }
-
-// }

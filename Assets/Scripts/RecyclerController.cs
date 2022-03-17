@@ -8,13 +8,9 @@ public class RecyclerController : Conexion
     private List<ScrollerData> _data;
     public GameObject content;
     public EventCellView eventCellViewPrefab;
-
-
-    //public int cellHeight;
-
     public int pageCount;
 
-    private bool _loadingNew;
+    // private bool _loadingNew;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +40,5 @@ public class RecyclerController : Conexion
             GameObject prefab = Instantiate(eventCellViewPrefab.gameObject, content.transform, false);
             prefab.GetComponent<EventCellView>().getImage(data[i].image);
         }
-        _loadingNew = false;
     }
 }

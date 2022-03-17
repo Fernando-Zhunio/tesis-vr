@@ -20,6 +20,8 @@ public class EventCellView : Conexion
     public Button btnVr;
     public Button btnSuscripted;
     public Button btnDetail;
+
+    private DateTime start_date;
     private Location location_ug_center = new Location(-2.181452614962342, -79.89844529968079);
     // public double lat;
     // public double lng;
@@ -34,14 +36,17 @@ public class EventCellView : Conexion
 
     public Sprite favorite;
 
+    public EventModel eventModel;
+
     public void SetData(EventModel data)
     {
-        // eventModel = data;
+        eventModel = data;
         title.text = data.name;
         description.text = data.description;
         date.text = data.start_date;
         id = data.id;
         isFavorite = data.is_favorite;
+        start_date = Convert.ToDateTime(data.start_date);
         print(isFavorite);
         if (isFavorite)
         {
@@ -51,17 +56,21 @@ public class EventCellView : Conexion
         {
             imageFavorite.sprite = notFavorite;
         }
-        location = new Location(data.position[0], data.position[1]);
+        location = new Location(data.position[1], data.position[0]);
     }
 
 
     public void goVr()
     {
-        // StartCoroutine(getPosition());
-        double lat = -2.1609372664849325;
-        double lng = -79.89925870340669;
-        goVrApproved(lat, lng);
+        StartCoroutine(getPosition());
+        // double lat = -2.1609372664849325;
+        // double lng = -79.89925870340669;
+        // goVrApproved();
 
+    }
+
+    public void Subscription(){
+        ManagerNotification.AddNotification("Hola! un evento esta por iniciar",eventModel.name, start_date);
     }
 
 
