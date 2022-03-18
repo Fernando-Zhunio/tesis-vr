@@ -35,11 +35,22 @@ public class Global : MonoBehaviour
         //DontDestroyOnLoad(this.gameObject);
     }
 
-    public static Location getLocation()
+    public static Location GetLocation()
     {
-       double latitud = PlayerPrefs.GetFloat("latitudVr");
-       double longitud = PlayerPrefs.GetFloat("longitudVr");
-       return new Location(latitud, longitud);
+    //    double latitud = PlayerPrefs.GetFloat("latitudVr");
+    //    double longitud = PlayerPrefs.GetFloat("longitudVr");
+    //    return new Location(latitud, longitud);
+     if (PlayerPrefs.HasKey("location"))
+        {
+            Location location = JsonUtility.FromJson<Location>(PlayerPrefs.GetString("location"));
+            return location;
+        }
+        return null;
+    }
+     public static void SetLocation(Location location)
+    {
+        // PlayerPrefs.SetString("locationVR", location.latitud + "," + location.longitud);
+        PlayerPrefs.SetString("location",JsonUtility.ToJson(location));
     }
 
     public static string getEventId()
@@ -50,15 +61,6 @@ public class Global : MonoBehaviour
     public static void setEventId(int id)
     {
          PlayerPrefs.SetString("EventId", id.ToString());
-    }
-
-
-
-    public static void setLocation(Location location)
-    {
-        PlayerPrefs.SetString("locationVR", location.latitud + "," + location.longitud);
-        // PlayerPrefs.SetString("latitudVr", location.latitud);
-        // PlayerPrefs.SetString("longitudVr", location.longitud);
     }
 
     public static void SetSession(SessionModel sessionModel)

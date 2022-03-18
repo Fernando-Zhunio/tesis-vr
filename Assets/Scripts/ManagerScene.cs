@@ -8,7 +8,7 @@ public class ManagerScene : MonoBehaviour
 
     public static void LoadSceneVr()
     {
-        SceneManager.LoadScene("AR", LoadSceneMode.Additive);
+        SceneManager.LoadScene("AR2", LoadSceneMode.Additive);
     }
 
     public static void LoadSceneAuth()

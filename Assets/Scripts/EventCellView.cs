@@ -22,7 +22,7 @@ public class EventCellView : Conexion
     public Button btnDetail;
 
     private DateTime start_date;
-    private Location location_ug_center = new Location(-2.181452614962342, -79.89844529968079);
+    // private Location location_ug_center = new Location(-2.181452614962342, -79.89844529968079);
     // public double lat;
     // public double lng;
     // public bool isActive;
@@ -62,15 +62,21 @@ public class EventCellView : Conexion
 
     public void goVr()
     {
-        StartCoroutine(getPosition());
-        // double lat = -2.1609372664849325;
-        // double lng = -79.89925870340669;
-        // goVrApproved();
-
+        // Global.setLocation(location);
+        GameObject mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        GameObject canvasHome = GameObject.FindGameObjectWithTag("CanvasHome");
+        canvasHome.SetActive(false);
+        mainCamera.SetActive(false);
+        // Location location = new Location(lat, lng);
+        Global.SetLocation(location);
+        Global.setEventId(id);
+        ManagerScene.LoadSceneVr();
+        // StartCoroutine(getPosition());
     }
 
-    public void Subscription(){
-        ManagerNotification.AddNotification("Hola! un evento esta por iniciar",eventModel.name, start_date);
+    public void Subscription()
+    {
+        ManagerNotification.AddNotification("Hola! un evento esta por iniciar", eventModel.name, start_date);
     }
 
 
@@ -162,7 +168,7 @@ public class EventCellView : Conexion
         canvasHome.SetActive(false);
         mainCamera.SetActive(false);
         Location location = new Location(lat, lng);
-        Global.setLocation(location);
+        Global.SetLocation(location);
         Global.setEventId(id);
         ManagerScene.LoadSceneVr();
     }
