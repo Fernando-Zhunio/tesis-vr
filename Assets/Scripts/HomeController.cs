@@ -16,9 +16,16 @@ public class HomeController : Conexion
     public StadisticsEvents stadisticsEvents;
     public GameObject mainCam;
     public GameObject canvasHome;
+    EventModel mainEvent;
+    int click;
 
     void Awake()
     {
+        if (!Global.IsAuthenticated())
+        {
+            Global.logout();
+            return;
+        }
         _data = new List<ScrollerData>();
         NotificationController.ShowToast("Cargando eventos, espere un momento...");
         StartCoroutine(CallGetBackend(Routes.home));
@@ -28,12 +35,40 @@ public class HomeController : Conexion
     {
         if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
         {
-                Permission.RequestUserPermission(Permission.FineLocation);
+            Permission.RequestUserPermission(Permission.FineLocation);
         }
-         if (!Permission.HasUserAuthorizedPermission(Permission.Camera))
+        if (!Permission.HasUserAuthorizedPermission(Permission.Camera))
         {
-                Permission.RequestUserPermission(Permission.Camera);
+            Permission.RequestUserPermission(Permission.Camera);
         }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            click++;
+            NotificationController.ShowToast("Presione de nuevo para salir");
+
+            StartCoroutine(ClickTime());
+
+            if (click > 1)
+            {
+                print("salir");
+                Application.Quit();
+            }
+        }
+    }
+
+    public void GoVrMainEvent()
+    {
+        Location location = new Location(mainEvent.position[1], mainEvent.position[0]);
+        ControllerGlobalSingletons.Instance.ActiveVr(mainEvent.id, location);
+    }
+    IEnumerator ClickTime()
+    {
+        yield return new WaitForSeconds(1f);
+        click = 0;
     }
 
 
@@ -50,7 +85,7 @@ public class HomeController : Conexion
                 GameObject prefab = Instantiate(eventCellViewPrefab.gameObject, content.transform, false);
                 prefab.GetComponent<EventCellView>().getImage(data[i].image);
             }
-            EventModel mainEvent = homeData.events[0];
+             mainEvent = homeData.events[0];
             profileUser.SetData(homeData.user);
             bestEvent.SetData(mainEvent.name, mainEvent.description, mainEvent.start_date);
             // Si no se asigna no se muestra el mapa
@@ -86,10 +121,11 @@ public class HomeController : Conexion
         ManagerScene.closeSceneAr();
     }
 
-    public void getFavorite() {
-            // isGetFavorite = true;
-            // StartCoroutine(CallGetBackend(Routes.getFavorites));
-            HttpGet(Routes.getFavorites, getFavoriteResponse);
+    public void getFavorite()
+    {
+        // isGetFavorite = true;
+        // StartCoroutine(CallGetBackend(Routes.getFavorites));
+        HttpGet(Routes.getFavorites, getFavoriteResponse);
     }
 
     private void getFavoriteResponse(string _data)

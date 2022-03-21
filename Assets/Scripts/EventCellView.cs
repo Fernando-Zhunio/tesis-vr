@@ -62,21 +62,22 @@ public class EventCellView : Conexion
 
     public void goVr()
     {
-        // Global.setLocation(location);
-        GameObject mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-        GameObject canvasHome = GameObject.FindGameObjectWithTag("CanvasHome");
-        canvasHome.SetActive(false);
-        mainCamera.SetActive(false);
-        // Location location = new Location(lat, lng);
-        Global.SetLocation(location);
-        Global.setEventId(id);
-        ManagerScene.LoadSceneVr();
-        // StartCoroutine(getPosition());
+        // GameObject mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+        // GameObject canvasHome = GameObject.FindGameObjectWithTag("CanvasHome");
+        // canvasHome.SetActive(false);
+        // mainCamera.SetActive(false);
+        // Global.SetLocation(location);
+        // Global.setEventId(id);
+        // ManagerScene.LoadSceneVr();
+
+
+        ControllerGlobalSingletons.Instance.ActiveVr(id, location);
+
     }
 
     public void Subscription()
     {
-        ManagerNotification.AddNotification("Hola! un evento esta por iniciar", eventModel.name, start_date);
+        ManagerNotification.AddNotification(id, "Hola! un evento esta por iniciar", eventModel.name, start_date);
     }
 
 
@@ -171,6 +172,7 @@ public class EventCellView : Conexion
         Global.SetLocation(location);
         Global.setEventId(id);
         ManagerScene.LoadSceneVr();
+
     }
 
     public static double DistanceTo(double lat1, double lon1, double lat2, double lon2, char unit = 'K')

@@ -8,29 +8,29 @@ using ARLocation.MapboxRoutes;
 public class VrManager : Conexion
 {
 
-    public MapboxRoute mapBoxRoute;
+    // public MapboxRoute mapBoxRoute;
 
-    private void Start()
-    {
-        Location location = Global.GetLocation();
-        print(location.latitud);
-        RouteWaypoint waypointStart = new RouteWaypoint()
-        {
-            Type = RouteWaypointType.UserLocation,
-        };
-        RouteWaypoint waypointEnd = new RouteWaypoint()
-        {
-            Type = RouteWaypointType.Location,
-            Location = new ARLocation.Location()
-            {
-                Latitude = location.latitudDouble,
-                Longitude = location.longitudDouble,
-                Altitude = 0,
-                AltitudeMode = ARLocation.AltitudeMode.DeviceRelative
-            }
-        };
-        mapBoxRoute.LoadRoute(waypointStart, waypointEnd);
-    }
+    // private void Start()
+    // {
+    //     Location location = Global.GetLocation();
+    //     print(location.latitud);
+    //     RouteWaypoint waypointStart = new RouteWaypoint()
+    //     {
+    //         Type = RouteWaypointType.UserLocation,
+    //     };
+    //     RouteWaypoint waypointEnd = new RouteWaypoint()
+    //     {
+    //         Type = RouteWaypointType.Location,
+    //         Location = new ARLocation.Location()
+    //         {
+    //             Latitude = location.latitudDouble,
+    //             Longitude = location.longitudDouble,
+    //             Altitude = 0,
+    //             AltitudeMode = ARLocation.AltitudeMode.DeviceRelative
+    //         }
+    //     };
+    //     mapBoxRoute.LoadRoute(waypointStart, waypointEnd);
+    // }
     public override void getResponse<T>(T data)
     {
 

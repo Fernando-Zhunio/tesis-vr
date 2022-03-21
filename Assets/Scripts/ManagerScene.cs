@@ -1,14 +1,28 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class ManagerScene : MonoBehaviour
 {
-    
 
-    public static void LoadSceneVr()
+
+
+    public static IEnumerator  LoadSceneVr()
     {
-        SceneManager.LoadScene("AR2", LoadSceneMode.Additive);
+        // async = SceneManager.LoadSceneAsync("AR2", LoadSceneMode.Additive);
+        const string name = "AR2";
+        AsyncOperation _async = new AsyncOperation();
+        _async = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+        _async.allowSceneActivation = true;
+ 
+        while (!_async.isDone) {
+            yield return null;
+        }
+ 
+        Scene nextScene = SceneManager.GetSceneByName( name );
+        if (nextScene.IsValid ()) {
+            SceneManager.SetActiveScene (nextScene);
+        }
+
     }
 
     public static void LoadSceneAuth()
@@ -22,7 +36,8 @@ public class ManagerScene : MonoBehaviour
         SceneManager.LoadScene("Home");
     }
 
-    public static void closeSceneAr() {
+    public static void closeSceneAr()
+    {
         SceneManager.UnloadSceneAsync("AR");
     }
 }

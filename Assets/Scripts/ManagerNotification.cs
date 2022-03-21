@@ -6,27 +6,17 @@ using Unity.Notifications.Android;
 public class ManagerNotification : MonoBehaviour
 {
     // Start is called before the first frame update
+    // string idNotification = "fernando_zhunio";
     void Start()
     {
-        var channel = new AndroidNotificationChannel()
-        {
-            Id = "channel_id",
-            Name = "Default Channel",
-            Importance = Importance.High,
-            Description = "Generic notifications",
-        };
-        AndroidNotificationCenter.RegisterNotificationChannel(channel);
+        GleyNotifications.Initialize(false);
     }
 
-    public static void AddNotification(string title, string text, DateTime time)
+    public static void AddNotification(int id, string title, string text, DateTime time)
     {
-        var notification = new AndroidNotification();
-        notification.Title = title;
-        notification.Text = text;
-        notification.FireTime = time;
-
-        AndroidNotificationCenter.SendNotification(notification, "channel_id");
-        // Para obtener detalles sobre otras propiedades que puede configurar, consulte AndroidNotification .
+        TimeSpan timeSpan = time - DateTime.Now.Date;
+        GleyNotifications.SendNotification(title, text, timeSpan, "icon_small", "icon_large", id.ToString());
     }
+
 
 }
