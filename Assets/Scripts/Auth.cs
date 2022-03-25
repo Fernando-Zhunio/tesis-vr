@@ -42,7 +42,6 @@ public class Auth : Conexion
 
     public void OnValueChanged(string str)
     {
-        print("String:" + str);
         if (str.Length > 0)
         {
             txt_birthday.onValueChanged.RemoveAllListeners();
@@ -76,7 +75,6 @@ public class Auth : Conexion
         if (Panel_login.activeInHierarchy)
         {
             SessionModel data = JsonUtility.FromJson<SessionModel>(_data.ToString());
-            print(" request:" + data.user.name);
             Global.SetSession(data);
         }
         else
@@ -108,9 +106,9 @@ public class Auth : Conexion
         NotificationController.ShowProgressDialog("Verificando credenciales", "Espere un momento...");
         WWWForm form = new WWWForm();
         form.AddField("email", txt_email.text);
-        // form.AddField("password", txt_password.text);
+        form.AddField("password", txt_password.text);
         // form.AddField("email", "fzhunio91@hotmail.com");
-        form.AddField("password", "fernando1991");
+        // form.AddField("password", "fernando1991");
         print($"email: '{txt_email.text}' {form.data.ToString()}");
         print($"password: '{txt_password.text}'");
         StartCoroutine(CallPostBackend(Routes.login, form));

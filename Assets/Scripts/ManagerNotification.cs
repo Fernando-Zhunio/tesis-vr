@@ -12,10 +12,9 @@ public class ManagerNotification : MonoBehaviour
         GleyNotifications.Initialize(false);
     }
 
-    public static void AddNotification(int id, string title, string text, DateTime time)
+    public static void AddNotification(int id, string title, string text, TimeSpan time)
     {
-        TimeSpan timeSpan = time - DateTime.Now.Date;
-        GleyNotifications.SendNotification(title, text, timeSpan, "icon_small", "icon_large", id.ToString());
+        GleyNotifications.SendNotification(title, text, time, "icon_small", "icon_large", id.ToString());
     }
 
 

@@ -21,7 +21,8 @@ public class EventCellView : Conexion
     public Button btnSuscripted;
     public Button btnDetail;
 
-    private DateTime start_date;
+
+    // public DateTime start_date;
     // private Location location_ug_center = new Location(-2.181452614962342, -79.89844529968079);
     // public double lat;
     // public double lng;
@@ -46,7 +47,9 @@ public class EventCellView : Conexion
         date.text = data.start_date;
         id = data.id;
         isFavorite = data.is_favorite;
-        start_date = Convert.ToDateTime(data.start_date);
+        // start_date = Convert.ToDateTime(data.start_date);
+
+        print(data.start_date);
         print(isFavorite);
         if (isFavorite)
         {
@@ -62,22 +65,21 @@ public class EventCellView : Conexion
 
     public void goVr()
     {
-        // GameObject mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-        // GameObject canvasHome = GameObject.FindGameObjectWithTag("CanvasHome");
-        // canvasHome.SetActive(false);
-        // mainCamera.SetActive(false);
-        // Global.SetLocation(location);
-        // Global.setEventId(id);
-        // ManagerScene.LoadSceneVr();
-
-
         ControllerGlobalSingletons.Instance.ActiveVr(id, location);
-
     }
 
     public void Subscription()
     {
-        ManagerNotification.AddNotification(id, "Hola! un evento esta por iniciar", eventModel.name, start_date);
+        DateTime start_date = DateTime.ParseExact(eventModel.start_date, "yyyy-MM-dd HH:mm:ss",
+                                   System.Globalization.CultureInfo.InvariantCulture);
+        TimeSpan timeSpan = start_date.Add(new TimeSpan(-2, 0, 0)) - DateTime.Now;
+
+            // GleyNotifications.SendNotification("Game Title", "Notification body", new System.TimeSpan(0, minutes, 0), null, null, "Opened from Gley Notification");
+
+        NotificationController.ShowToast("Recibirás una notificación cuando este evento el dia del evento, a las " + timeSpan.TotalHours + " horas");
+
+        // ManagerNotification.AddNotification(id, "Hola! un evento esta por iniciar en 2 horas", eventModel.name, timeSpan);
+        ManagerNotification.AddNotification(id, "Hola! un evento esta por iniciar en 2 horas", eventModel.name, timeSpan);
     }
 
 

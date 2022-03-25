@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.Android;
+using UnityEngine.UI;
 
 public class HomeController : Conexion
 {
@@ -16,6 +17,8 @@ public class HomeController : Conexion
     public StadisticsEvents stadisticsEvents;
     public GameObject mainCam;
     public GameObject canvasHome;
+
+    public Image imageFavoriteMain;
     EventModel mainEvent;
     int click;
 
@@ -74,7 +77,7 @@ public class HomeController : Conexion
 
     private void LoadData(HomeModel homeData)
     {
-        stadisticsEvents.SetData(homeData.eventsFavoriteCount, 0);
+        stadisticsEvents.SetData(homeData.eventsFavoriteCount, homeData.eventsActivesCount);
         int size = homeData.events.Length;
         if (size > 0)
         {
@@ -148,6 +151,31 @@ public class HomeController : Conexion
             NotificationController.ShowToast("No hay eventos favoritos");
         }
     }
+
+      public void doFavorite()
+    {
+        string url = Routes.eventfavorite(mainEvent.id);
+        print(url);
+        HttpPost(url,null, responseFavorite);
+        // StartCoroutine(CallPostBackend(url, null));
+    }
+
+     public  void responseFavorite(string data)
+    {
+        Debug.Log("data:"+data);
+        if ( mainEvent.is_favorite)
+        {
+            mainEvent.is_favorite = false;
+            imageFavoriteMain.color = Color.white;
+            // imageFavoriteMain.sprite = notFavorite;
+        }
+        else
+        {
+            mainEvent.is_favorite = true;
+            imageFavoriteMain.color = Color.red;
+            // imageFavoriteMain.sprite = favorite;
+        }
+    }
 }
 
 
@@ -158,6 +186,7 @@ public class HomeModel
     public EventModel[] events;
     public UserModel user;
     public int eventsFavoriteCount;
+    public int eventsActivesCount;
 }
 
 
@@ -199,11 +228,11 @@ public class BestEvent
 public class StadisticsEvents
 {
     public TextMeshProUGUI txtCountFavorite;
-    public TextMeshProUGUI txtCountSubscription;
+    public TextMeshProUGUI txtCountEventsActive;
 
-    public void SetData(int countFavorite = 0, int countSubscription = 0)
+    public void SetData(int countFavorite = 0, int countEventsActive = 0)
     {
         txtCountFavorite.text = countFavorite.ToString();
-        txtCountSubscription.text = countSubscription.ToString();
+        txtCountEventsActive.text = countEventsActive.ToString();
     }
 }

@@ -48,6 +48,8 @@ public abstract class Conexion : MonoBehaviour
         Response(www);
     }
 
+
+
     protected IEnumerator CallPutBackend(string uri, WWWForm form = null)
     {
         www = UnityWebRequest.Put(Enviroment.url + uri, form?.data);
@@ -70,7 +72,7 @@ public abstract class Conexion : MonoBehaviour
         {
             ValidationErrors(www);
             print("Error: " + www.error);
-            
+
         }
         else
         {
@@ -124,6 +126,22 @@ public abstract class Conexion : MonoBehaviour
         StartCoroutine(CallGetBackend(url, callback, callbackError));
     }
 
+    protected IEnumerator CallPostBackend(string uri, WWWForm form, Action<string> callback, Action<string> callbackError = null)
+    {
+        print(Enviroment.url + uri);
+        www = UnityWebRequest.Post(Enviroment.url + uri, form);
+        setHaderRequest();
+        yield return www.SendWebRequest();
+        Response(www, callback, callbackError);
+    }
+
+    protected void HttpPost(string path, WWWForm form, Action<string> callback, Action<string> callbackError = null)
+    {
+        // string url = Enviroment.url + path;
+        // print("HttpGet: " + url);
+        StartCoroutine(CallPostBackend(path,form, callback, callbackError));
+    }
+
     private void Response(UnityWebRequest www, Action<string> callback, Action<string> callbackError)
     {
         if (www.result != UnityWebRequest.Result.Success)
@@ -131,13 +149,13 @@ public abstract class Conexion : MonoBehaviour
             ValidationErrors(www);
             // ShowValidationErrors(www);
             print("Error: " + www.error);
-            NotificationController.ShowToast( www.error);
+            NotificationController.ShowToast(www.error);
             callbackError(www.downloadHandler.text);
-            
+
         }
         else
         {
-            callback(www.downloadHandler.text );
+            callback(www.downloadHandler.text);
         }
         HideLoading();
     }

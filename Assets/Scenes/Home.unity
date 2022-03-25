@@ -1095,7 +1095,7 @@ MonoBehaviour:
     txtDate: {fileID: 1800353689}
   stadisticsEvents:
     txtCountFavorite: {fileID: 1786683055}
-    txtCountSubscription: {fileID: 570659440}
+    txtCountEventsActive: {fileID: 570659440}
   mainCam: {fileID: 1787361570}
   canvasHome: {fileID: 962516357}
 --- !u!1 &400897468
@@ -1890,6 +1890,7 @@ GameObject:
   m_Component:
   - component: {fileID: 628658661}
   - component: {fileID: 628658660}
+  - component: {fileID: 628658662}
   m_Layer: 0
   m_Name: Inicializer
   m_TagString: Untagged
@@ -1925,6 +1926,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &628658662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 628658659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0a1cab39d041b2459a563e9ca056235, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &664126662
 GameObject:
   m_ObjectHideFlags: 0
@@ -10814,8 +10827,28 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 409884125278014125, guid: f28d4f2b46d09b4458889d5b4a1908f1,
         type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 409884125278014125, guid: f28d4f2b46d09b4458889d5b4a1908f1,
+        type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 409884125278014125, guid: f28d4f2b46d09b4458889d5b4a1908f1,
+        type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 409884125278014125, guid: f28d4f2b46d09b4458889d5b4a1908f1,
+        type: 3}
       propertyPath: m_overflowMode
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 409884125278014125, guid: f28d4f2b46d09b4458889d5b4a1908f1,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 975919391085397090, guid: f28d4f2b46d09b4458889d5b4a1908f1,
         type: 3}
@@ -10831,6 +10864,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontStyle
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 975919391085397090, guid: f28d4f2b46d09b4458889d5b4a1908f1,
+        type: 3}
+      propertyPath: m_fontColor.b
+      value: 0.972549
+      objectReference: {fileID: 0}
+    - target: {fileID: 975919391085397090, guid: f28d4f2b46d09b4458889d5b4a1908f1,
+        type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 975919391085397090, guid: f28d4f2b46d09b4458889d5b4a1908f1,
+        type: 3}
+      propertyPath: m_fontColor.r
+      value: 0.8235294
       objectReference: {fileID: 0}
     - target: {fileID: 975919391085397090, guid: f28d4f2b46d09b4458889d5b4a1908f1,
         type: 3}
@@ -11187,22 +11235,27 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 6cc40bca54585084db994d1e37b8c765,
+      objectReference: {fileID: 21300000, guid: 28872c6204617d14e8ba7e9f3e7e2223,
         type: 3}
     - target: {fileID: 7981318452228111723, guid: f28d4f2b46d09b4458889d5b4a1908f1,
         type: 3}
-      propertyPath: m_Color.b
+      propertyPath: m_Color.a
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7981318452228111723, guid: f28d4f2b46d09b4458889d5b4a1908f1,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.6039216
       objectReference: {fileID: 0}
     - target: {fileID: 7981318452228111723, guid: f28d4f2b46d09b4458889d5b4a1908f1,
         type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.6039216
       objectReference: {fileID: 0}
     - target: {fileID: 7981318452228111723, guid: f28d4f2b46d09b4458889d5b4a1908f1,
         type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.6039216
       objectReference: {fileID: 0}
     - target: {fileID: 7981318452453542732, guid: f28d4f2b46d09b4458889d5b4a1908f1,
         type: 3}
