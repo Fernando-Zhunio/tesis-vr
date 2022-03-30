@@ -31,7 +31,8 @@ public class HomeController : Conexion
         }
         _data = new List<ScrollerData>();
         NotificationController.ShowToast("Cargando eventos, espere un momento...");
-        StartCoroutine(CallGetBackend(Routes.home));
+        // StartCoroutine(CallGetBackend(Routes.home));
+        HttpGet(Routes.home, fillDataHome);
     }
 
     void Start()
@@ -73,8 +74,6 @@ public class HomeController : Conexion
         yield return new WaitForSeconds(1f);
         click = 0;
     }
-
-
     private void LoadData(HomeModel homeData)
     {
         stadisticsEvents.SetData(homeData.eventsFavoriteCount, homeData.eventsActivesCount);
@@ -88,12 +87,13 @@ public class HomeController : Conexion
                 GameObject prefab = Instantiate(eventCellViewPrefab.gameObject, content.transform, false);
                 prefab.GetComponent<EventCellView>().getImage(data[i].image);
             }
-             mainEvent = homeData.events[0];
+            mainEvent = homeData.events[0];
             profileUser.SetData(homeData.user);
             bestEvent.SetData(mainEvent.name, mainEvent.description, mainEvent.start_date);
             // Si no se asigna no se muestra el mapa
             Location location = new Location(mainEvent.position[1], mainEvent.position[0]);
             Global.SetEventMap(mainEvent);
+
         }
         else
         {
@@ -103,12 +103,23 @@ public class HomeController : Conexion
 
     }
 
+    //! ya no vale --------------------------------------------------------------
     public override void getResponse<T>(T _data)
     {
-        print(_data);
-        ResponseSuccessModel<HomeModel> data = JsonUtility.FromJson<ResponseSuccessModel<HomeModel>>(_data.ToString());
-        LoadData(data.data);
-        print(JsonUtility.ToJson(data));
+        // print(_data);
+        // ResponseSuccessModel<HomeModel> data = JsonUtility.FromJson<ResponseSuccessModel<HomeModel>>(_data.ToString());
+        // LoadData(data.data);
+        // print(JsonUtility.ToJson(data));
+    }
+
+    private void fillDataHome(string response)
+    {
+        print(response);
+        ResponseSuccessModel<HomeModel> homeModel = JsonUtility.FromJson<ResponseSuccessModel<HomeModel>>(response.ToString());
+        getFavorite();
+        print(JsonUtility.ToJson("home:  " + homeModel.data.events.Length));
+        LoadData(homeModel.data);
+        // print(JsonUtility.ToJson(homeModel));
     }
 
 
@@ -124,21 +135,26 @@ public class HomeController : Conexion
         ManagerScene.closeSceneAr();
     }
 
+    public void goMap()
+    {
+         Global.SetEventMap(mainEvent);
+        ManagerPages managerPages = GameObject.FindObjectOfType<ManagerPages>().GetComponent<ManagerPages>();
+        managerPages.changedPage("Map");
+    }
+
     public void getFavorite()
     {
-        // isGetFavorite = true;
-        // StartCoroutine(CallGetBackend(Routes.getFavorites));
         HttpGet(Routes.getFavorites, getFavoriteResponse);
     }
 
     private void getFavoriteResponse(string _data)
     {
+        print(_data);
         ResponseSuccessModel<EventModel[]> data = JsonUtility.FromJson<ResponseSuccessModel<EventModel[]>>(_data);
-        print(JsonUtility.ToJson(data));
         if (data.data.Length > 0)
         {
-            // contentCurrent = contentFavorite;
             int size = data.data.Length;
+            print(size);
             for (int i = 0; i < size; i++)
             {
                 eventCellViewPrefab.SetData(data.data[i]);
@@ -152,27 +168,51 @@ public class HomeController : Conexion
         }
     }
 
-      public void doFavorite()
+    public void putEventFavorite(GameObject instanceGameobject)
+    {
+        GameObject prefab = Instantiate(instanceGameobject, contentFavorite.transform, false);
+        stadisticsEvents.addCountFavorite();
+    }
+
+    public void deleteEventFavorite(int id)
+    {
+        EventCellView[] eventCellViews = contentFavorite.GetComponentsInChildren<EventCellView>();
+        foreach (EventCellView eventCellView in eventCellViews)
+        {
+            if (eventCellView.id == id)
+            {
+                Destroy(eventCellView.gameObject);
+                stadisticsEvents.subCountFavorite();
+            }
+        }
+        // Destroy(instanceGameobject);
+    }
+
+    public void doFavorite()
     {
         string url = Routes.eventfavorite(mainEvent.id);
         print(url);
-        HttpPost(url,null, responseFavorite);
+        HttpPost(url, null, responseFavorite);
         // StartCoroutine(CallPostBackend(url, null));
     }
 
-     public  void responseFavorite(string data)
+    public void responseFavorite(string data)
     {
-        Debug.Log("data:"+data);
-        if ( mainEvent.is_favorite)
+        Debug.Log("data:" + data);
+        if (mainEvent.is_favorite)
         {
             mainEvent.is_favorite = false;
             imageFavoriteMain.color = Color.white;
-            // imageFavoriteMain.sprite = notFavorite;
+            deleteEventFavorite(mainEvent.id);
         }
         else
         {
             mainEvent.is_favorite = true;
             imageFavoriteMain.color = Color.red;
+            eventCellViewPrefab.SetData(mainEvent);
+            // GameObject prefab = Instantiate(eventCellViewPrefab.gameObject, contentFavorite.transform, false);
+            // prefab.GetComponent<EventCellView>().getImage(data.data[i].image);
+            putEventFavorite(eventCellViewPrefab.gameObject);
             // imageFavoriteMain.sprite = favorite;
         }
     }
@@ -229,10 +269,29 @@ public class StadisticsEvents
 {
     public TextMeshProUGUI txtCountFavorite;
     public TextMeshProUGUI txtCountEventsActive;
+    private int countFavorite;
 
     public void SetData(int countFavorite = 0, int countEventsActive = 0)
     {
         txtCountFavorite.text = countFavorite.ToString();
+        this.countFavorite = countFavorite;
         txtCountEventsActive.text = countEventsActive.ToString();
+    }
+
+    public void setFavoriteCount(int count)
+    {
+        txtCountFavorite.text = count.ToString();
+    }
+
+    public void addCountFavorite()
+    {
+        countFavorite++;
+        txtCountFavorite.text = countFavorite.ToString();
+    }
+
+    public void subCountFavorite()
+    {
+        countFavorite--;
+        txtCountFavorite.text = countFavorite.ToString();
     }
 }

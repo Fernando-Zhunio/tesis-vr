@@ -14,24 +14,16 @@ public class EventCellView : Conexion
     public TextMeshProUGUI title;
     public TextMeshProUGUI description;
     public TextMeshProUGUI date;
+    public TextMeshProUGUI date_end;
     public RawImage image;
 
     [Header("Buttons")]
     public Button btnVr;
     public Button btnSuscripted;
     public Button btnDetail;
-
-
-    // public DateTime start_date;
-    // private Location location_ug_center = new Location(-2.181452614962342, -79.89844529968079);
-    // public double lat;
-    // public double lng;
-    // public bool isActive;
     public Location location;
     public int id;
     private bool isFavorite = false;
-    // public EventModel eventModel;
-
     public Image imageFavorite;
     public Sprite notFavorite;
 
@@ -45,12 +37,9 @@ public class EventCellView : Conexion
         title.text = data.name;
         description.text = data.description;
         date.text = data.start_date;
+        date_end.text = data.end_date;
         id = data.id;
         isFavorite = data.is_favorite;
-        // start_date = Convert.ToDateTime(data.start_date);
-
-        print(data.start_date);
-        print(isFavorite);
         if (isFavorite)
         {
             imageFavorite.sprite = favorite;
@@ -60,6 +49,13 @@ public class EventCellView : Conexion
             imageFavorite.sprite = notFavorite;
         }
         location = new Location(data.position[1], data.position[0]);
+    }
+
+    public void goMap()
+    {
+        Global.SetEventMap(eventModel);
+        ManagerPages managerPages = GameObject.FindObjectOfType<ManagerPages>().GetComponent<ManagerPages>();
+        managerPages.changedPage("Map");
     }
 
 
@@ -74,7 +70,7 @@ public class EventCellView : Conexion
                                    System.Globalization.CultureInfo.InvariantCulture);
         TimeSpan timeSpan = start_date.Add(new TimeSpan(-2, 0, 0)) - DateTime.Now;
 
-            // GleyNotifications.SendNotification("Game Title", "Notification body", new System.TimeSpan(0, minutes, 0), null, null, "Opened from Gley Notification");
+        // GleyNotifications.SendNotification("Game Title", "Notification body", new System.TimeSpan(0, minutes, 0), null, null, "Opened from Gley Notification");
 
         NotificationController.ShowToast("Recibirás una notificación cuando este evento el dia del evento, a las " + timeSpan.TotalHours + " horas");
 
@@ -177,36 +173,43 @@ public class EventCellView : Conexion
 
     }
 
-    public static double DistanceTo(double lat1, double lon1, double lat2, double lon2, char unit = 'K')
-    {
-        double rlat1 = Math.PI * lat1 / 180;
-        double rlat2 = Math.PI * lat2 / 180;
-        double theta = lon1 - lon2;
-        double rtheta = Math.PI * theta / 180;
-        double dist =
-            Math.Sin(rlat1) * Math.Sin(rlat2) + Math.Cos(rlat1) *
-            Math.Cos(rlat2) * Math.Cos(rtheta);
-        dist = Math.Acos(dist);
-        dist = dist * 180 / Math.PI;
-        dist = dist * 60 * 1.1515;
-        dist = dist * 1.609344;
-        dist = dist * 1000;
-        dist = Convert.ToInt32(dist);
-        return dist;
-    }
+    // public static double DistanceTo(double lat1, double lon1, double lat2, double lon2, char unit = 'K')
+    // {
+    //     double rlat1 = Math.PI * lat1 / 180;
+    //     double rlat2 = Math.PI * lat2 / 180;
+    //     double theta = lon1 - lon2;
+    //     double rtheta = Math.PI * theta / 180;
+    //     double dist =
+    //         Math.Sin(rlat1) * Math.Sin(rlat2) + Math.Cos(rlat1) *
+    //         Math.Cos(rlat2) * Math.Cos(rtheta);
+    //     dist = Math.Acos(dist);
+    //     dist = dist * 180 / Math.PI;
+    //     dist = dist * 60 * 1.1515;
+    //     dist = dist * 1.609344;
+    //     dist = dist * 1000;
+    //     dist = Convert.ToInt32(dist);
+    //     return dist;
+    // }
 
     public override void getResponse<T>(T data)
     {
-        Debug.Log(data);
-        if (isFavorite)
+        Debug.Log("favorite:" + data);
+        if (eventModel.is_favorite)
         {
             isFavorite = false;
+            eventModel.is_favorite = false;
             imageFavorite.sprite = notFavorite;
+            HomeController homeController = GameObject.FindObjectOfType<HomeController>().GetComponent<HomeController>();
+            homeController.deleteEventFavorite(id);
+
         }
         else
         {
             isFavorite = true;
+            eventModel.is_favorite = true;
             imageFavorite.sprite = favorite;
+            HomeController homeController = GameObject.FindObjectOfType<HomeController>().GetComponent<HomeController>();
+            homeController.putEventFavorite(this.gameObject);
         }
     }
 }

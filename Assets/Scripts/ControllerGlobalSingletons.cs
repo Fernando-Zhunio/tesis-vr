@@ -23,16 +23,6 @@ public class ControllerGlobalSingletons : MonoBehaviour
         }
     }
 
-    // public void DesactiveCamera()
-    // {
-    //     MainCamera.SetActive(false);
-    // }
-
-    // public void ActiveCamera()
-    // {
-    //     MainCamera.SetActive(true);
-    // }
-
     public void ActiveVr(int id, Location location)
     {
         // GameObject mainCamera = GameObject.FindGameObjectWithTag("MainCamera");

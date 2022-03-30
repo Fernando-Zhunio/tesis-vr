@@ -71,6 +71,11 @@ public class ManagerPages : MonoBehaviour
         }
     }
 
+    public string CurrenPage()
+    {
+        return currentPage.name;
+    }
+
     public void EnableMap()
     {
         backgroundImage.enabled = false;
