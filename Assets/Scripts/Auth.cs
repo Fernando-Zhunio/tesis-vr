@@ -102,15 +102,14 @@ public class Auth : Conexion
 
     public void login()
     {
-        // Global.ShowAndroidToastMessage("Cargando", "Verificando credenciales", NotificationType.info);
         NotificationController.ShowProgressDialog("Verificando credenciales", "Espere un momento...");
         WWWForm form = new WWWForm();
         form.AddField("email", txt_email.text);
         form.AddField("password", txt_password.text);
         // form.AddField("email", "fzhunio91@hotmail.com");
         // form.AddField("password", "fernando1991");
-        print($"email: '{txt_email.text}' {form.data.ToString()}");
-        print($"password: '{txt_password.text}'");
+        // print($"email: '{txt_email.text}' {form.data.ToString()}");
+        // print($"password: '{txt_password.text}'");
         StartCoroutine(CallPostBackend(Routes.login, form));
     }
 

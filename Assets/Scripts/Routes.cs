@@ -16,4 +16,6 @@ public class Routes : MonoBehaviour
 
     public static string eventWaypoints(int id) { return "events/" + id + "/waypoints"; }
     public static string home = "home";
+
+    public static string eventLikeOrUnlike(int id) { return $"events/{id}/like-unlike"; }
 }

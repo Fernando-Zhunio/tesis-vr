@@ -10,6 +10,7 @@ public class RecyclerController : Conexion
     public EventCellView eventCellViewPrefab;
     public int pageCount;
 
+
     // private bool _loadingNew;
 
     // Start is called before the first frame update
@@ -41,4 +42,6 @@ public class RecyclerController : Conexion
             prefab.GetComponent<EventCellView>().getImage(data[i].image);
         }
     }
+
+    
 }

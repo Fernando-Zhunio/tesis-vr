@@ -23,13 +23,24 @@ public class EventCellView : Conexion
     public Button btnDetail;
     public Location location;
     public int id;
-    private bool isFavorite = false;
+    // private bool isFavorite = false;
+
     public Image imageFavorite;
+    public Sprite favorite;
     public Sprite notFavorite;
 
-    public Sprite favorite;
+
+    public Image imageLike;
+    public Sprite spriteLike;
+    public Sprite spriteNotLike;
+
 
     public EventModel eventModel;
+
+    public GameObject dropdownContent;
+
+    private bool like;
+
 
     public void SetData(EventModel data)
     {
@@ -39,14 +50,23 @@ public class EventCellView : Conexion
         date.text = data.start_date;
         date_end.text = data.end_date;
         id = data.id;
-        isFavorite = data.is_favorite;
-        if (isFavorite)
+        // isFavorite = data.is_favorite;
+        if (data.is_favorite)
         {
             imageFavorite.sprite = favorite;
         }
         else
         {
             imageFavorite.sprite = notFavorite;
+        }
+
+        if (data.has_liked)
+        {
+            imageLike.sprite = spriteLike;
+        }
+        else
+        {
+            imageLike.sprite = spriteNotLike;
         }
         location = new Location(data.position[1], data.position[0]);
     }
@@ -66,16 +86,44 @@ public class EventCellView : Conexion
 
     public void Subscription()
     {
-        DateTime start_date = DateTime.ParseExact(eventModel.start_date, "yyyy-MM-dd HH:mm:ss",
-                                   System.Globalization.CultureInfo.InvariantCulture);
-        TimeSpan timeSpan = start_date.Add(new TimeSpan(-2, 0, 0)) - DateTime.Now;
+        if (verifyContainAlert(eventModel.id))
+        {
+            NotificationController.ShowToast("Ya estas suscrito a este evento");
+            print("Ya estas suscrito a este evento");
+            return;
+        }
+        if (isTranscurrentEvent())
+        {
+            NotificationController.ShowToast("No puedes alertar a un evento que ya ha comenzado");
+            print("No puedes alertar a un evento que ya ha comenzado");
+            return;
+        }
+        print("Suscrito");
+        DateTime date_event = Convert.ToDateTime(eventModel.start_date).Subtract(new System.TimeSpan(0, 2, 0, 0));
+        DateTime now = DateTime.Now;
+        System.TimeSpan res = date_event.Subtract(now);
+        Global.SetEventAlert(eventModel.id);
+        NotificationController.ShowToast("El evento comienza en " + res.Days + " días " + res.Hours + " horas " + res.Minutes + " minutos");
+        GleyNotifications.SendNotification("Un evento esta por comenzar!", $"{eventModel.name} - Inicio dentro de dos horas", res, null, null, "Opened Notification");
+    }
 
-        // GleyNotifications.SendNotification("Game Title", "Notification body", new System.TimeSpan(0, minutes, 0), null, null, "Opened from Gley Notification");
+    private bool verifyContainAlert(int id)
+    {
+            return Global.GetEventAlert().Contains(id);
+    }
 
-        NotificationController.ShowToast("Recibirás una notificación cuando este evento el dia del evento, a las " + timeSpan.TotalHours + " horas");
+    public bool isTranscurrentEvent()
+    {
+        DateTime now = DateTime.Now;
+        DateTime start = Convert.ToDateTime(eventModel.start_date);
+        DateTime end = Convert.ToDateTime(eventModel.end_date);
 
-        // ManagerNotification.AddNotification(id, "Hola! un evento esta por iniciar en 2 horas", eventModel.name, timeSpan);
-        ManagerNotification.AddNotification(id, "Hola! un evento esta por iniciar en 2 horas", eventModel.name, timeSpan);
+        if (now > start && now < end)
+        {
+            return true;
+        }
+
+        return false;
     }
 
 
@@ -90,6 +138,31 @@ public class EventCellView : Conexion
         string url = Routes.eventfavorite(id);
         print(url);
         StartCoroutine(CallPostBackend(url, null));
+    }
+
+    public void doLikeOrUnlike()
+    {
+        string url = Routes.eventLikeOrUnlike(id);
+        // print(url);
+        // StartCoroutine(CallPostBackend(url, null));
+        HttpPost(url, null, responseDoLikeOrUnlike);
+    }
+
+    private void responseDoLikeOrUnlike(string text)
+    {
+        ResponseSuccessModel<bool> response = JsonUtility.FromJson<ResponseSuccessModel<bool>>(text);
+        if (response.success)
+        {
+            like = response.data;
+            if (like)
+            {
+                imageLike.sprite = spriteLike;
+            }
+            else
+            {
+                imageLike.sprite = spriteNotLike;
+            }
+        }
     }
 
     IEnumerator DownloadImage(string url)
@@ -173,44 +246,38 @@ public class EventCellView : Conexion
 
     }
 
-    // public static double DistanceTo(double lat1, double lon1, double lat2, double lon2, char unit = 'K')
-    // {
-    //     double rlat1 = Math.PI * lat1 / 180;
-    //     double rlat2 = Math.PI * lat2 / 180;
-    //     double theta = lon1 - lon2;
-    //     double rtheta = Math.PI * theta / 180;
-    //     double dist =
-    //         Math.Sin(rlat1) * Math.Sin(rlat2) + Math.Cos(rlat1) *
-    //         Math.Cos(rlat2) * Math.Cos(rtheta);
-    //     dist = Math.Acos(dist);
-    //     dist = dist * 180 / Math.PI;
-    //     dist = dist * 60 * 1.1515;
-    //     dist = dist * 1.609344;
-    //     dist = dist * 1000;
-    //     dist = Convert.ToInt32(dist);
-    //     return dist;
-    // }
 
     public override void getResponse<T>(T data)
     {
         Debug.Log("favorite:" + data);
-        if (eventModel.is_favorite)
+        ResponseSuccessModel<bool> response = JsonUtility.FromJson<ResponseSuccessModel<bool>>(data as string);
+
+        if (response.data)
         {
-            isFavorite = false;
-            eventModel.is_favorite = false;
-            imageFavorite.sprite = notFavorite;
+            // isFavorite = false;
+            // eventModel.is_favorite = false;
+            imageFavorite.sprite = favorite;
             HomeController homeController = GameObject.FindObjectOfType<HomeController>().GetComponent<HomeController>();
             homeController.deleteEventFavorite(id);
-
         }
         else
         {
-            isFavorite = true;
-            eventModel.is_favorite = true;
-            imageFavorite.sprite = favorite;
+            // isFavorite = true;
+            // eventModel.is_favorite = true;
+            imageFavorite.sprite = notFavorite;
             HomeController homeController = GameObject.FindObjectOfType<HomeController>().GetComponent<HomeController>();
             homeController.putEventFavorite(this.gameObject);
         }
+    }
+
+    public void openMenuMore()
+    {
+        dropdownContent.SetActive(true);
+    }
+
+    public void closeMenuMore()
+    {
+        dropdownContent.SetActive(false);
     }
 }
 

@@ -103,10 +103,10 @@ public abstract class Conexion : MonoBehaviour
         {
             NotificationController.ShowToast("Recurso no encontrado");
         }
-        else if (www.responseCode == 200)
-        {
-            NotificationController.ShowToast("Registro exitoso, inicie sesion");
-        }
+        // else if (www.responseCode == 200)
+        // {
+        //     NotificationController.ShowToast("Registro exitoso, inicie sesion");
+        // }
     }
 
 
@@ -142,19 +142,25 @@ public abstract class Conexion : MonoBehaviour
         StartCoroutine(CallPostBackend(path,form, callback, callbackError));
     }
 
-    private void Response(UnityWebRequest www, Action<string> callback, Action<string> callbackError)
+    private void Response(UnityWebRequest www, Action<string> callback, Action<string> callbackError = null)
     {
+
         if (www.result != UnityWebRequest.Result.Success)
         {
             ValidationErrors(www);
             // ShowValidationErrors(www);
             print("Error: " + www.error);
             NotificationController.ShowToast(www.error);
+            if (callbackError != null)
+            {
+                // callbackError(www.error);
             callbackError(www.downloadHandler.text);
+            }
 
         }
         else
         {
+            Debug.Log(www.downloadHandler.text);
             callback(www.downloadHandler.text);
         }
         HideLoading();

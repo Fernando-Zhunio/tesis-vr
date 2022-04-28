@@ -9,7 +9,7 @@ public class ManagerNotification : MonoBehaviour
     // string idNotification = "fernando_zhunio";
     void Start()
     {
-        GleyNotifications.Initialize(false);
+        GleyNotifications.Initialize();
     }
 
     public static void AddNotification(int id, string title, string text, TimeSpan time)

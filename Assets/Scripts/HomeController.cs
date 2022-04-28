@@ -64,11 +64,6 @@ public class HomeController : Conexion
         }
     }
 
-    public void GoVrMainEvent()
-    {
-        Location location = new Location(mainEvent.position[1], mainEvent.position[0]);
-        ControllerGlobalSingletons.Instance.ActiveVr(mainEvent.id, location);
-    }
     IEnumerator ClickTime()
     {
         yield return new WaitForSeconds(1f);
@@ -81,19 +76,12 @@ public class HomeController : Conexion
         if (size > 0)
         {
             EventModel[] data = homeData.events;
-            for (int i = 1; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
                 eventCellViewPrefab.SetData(data[i]);
                 GameObject prefab = Instantiate(eventCellViewPrefab.gameObject, content.transform, false);
                 prefab.GetComponent<EventCellView>().getImage(data[i].image);
             }
-            mainEvent = homeData.events[0];
-            profileUser.SetData(homeData.user);
-            bestEvent.SetData(mainEvent.name, mainEvent.description, mainEvent.start_date);
-            // Si no se asigna no se muestra el mapa
-            Location location = new Location(mainEvent.position[1], mainEvent.position[0]);
-            Global.SetEventMap(mainEvent);
-
         }
         else
         {
@@ -119,7 +107,6 @@ public class HomeController : Conexion
         getFavorite();
         print(JsonUtility.ToJson("home:  " + homeModel.data.events.Length));
         LoadData(homeModel.data);
-        // print(JsonUtility.ToJson(homeModel));
     }
 
 
@@ -128,12 +115,12 @@ public class HomeController : Conexion
         Global.logout();
     }
 
-    public void closeSceneVr()
-    {
-        canvasHome.SetActive(true);
-        mainCam.SetActive(true);
-        ManagerScene.closeSceneAr();
-    }
+    // public void closeSceneVr()
+    // {
+    //     canvasHome.SetActive(true);
+    //     mainCam.SetActive(true);
+    //     ManagerScene.closeSceneAr();
+    // }
 
     public void goMap()
     {
@@ -146,6 +133,7 @@ public class HomeController : Conexion
     {
         HttpGet(Routes.getFavorites, getFavoriteResponse);
     }
+
 
     private void getFavoriteResponse(string _data)
     {
@@ -186,35 +174,6 @@ public class HomeController : Conexion
             }
         }
         // Destroy(instanceGameobject);
-    }
-
-    public void doFavorite()
-    {
-        string url = Routes.eventfavorite(mainEvent.id);
-        print(url);
-        HttpPost(url, null, responseFavorite);
-        // StartCoroutine(CallPostBackend(url, null));
-    }
-
-    public void responseFavorite(string data)
-    {
-        Debug.Log("data:" + data);
-        if (mainEvent.is_favorite)
-        {
-            mainEvent.is_favorite = false;
-            imageFavoriteMain.color = Color.white;
-            deleteEventFavorite(mainEvent.id);
-        }
-        else
-        {
-            mainEvent.is_favorite = true;
-            imageFavoriteMain.color = Color.red;
-            eventCellViewPrefab.SetData(mainEvent);
-            // GameObject prefab = Instantiate(eventCellViewPrefab.gameObject, contentFavorite.transform, false);
-            // prefab.GetComponent<EventCellView>().getImage(data.data[i].image);
-            putEventFavorite(eventCellViewPrefab.gameObject);
-            // imageFavoriteMain.sprite = favorite;
-        }
     }
 }
 

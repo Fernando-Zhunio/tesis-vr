@@ -33,13 +33,11 @@ public class ControllerGlobalSingletons : MonoBehaviour
         // Location location = new Location(lat, lng);
         Global.SetLocation(location);
         Global.setEventId(id);
-       StartCoroutine(ManagerScene.LoadSceneVr());
+        StartCoroutine(ManagerScene.LoadSceneVr());
     }
 
     public void DesactiveVr()
     {
-        // GameObject mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
-        // GameObject canvasHome = GameObject.FindGameObjectWithTag("CanvasHome");
         if (ARLocationManager.Instance == null)
         {
             ARLocationManager.Instance.ResetARSession((() =>
@@ -50,7 +48,7 @@ public class ControllerGlobalSingletons : MonoBehaviour
         }
         canvasUIHome.gameObject.SetActive(true);
         mainCamera.SetActive(true);
-        UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync("AR2");
+        UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync("AR3");
 
     }
 }

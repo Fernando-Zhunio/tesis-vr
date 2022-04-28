@@ -9,7 +9,7 @@ public class ManagerScene : MonoBehaviour
     public static IEnumerator  LoadSceneVr()
     {
         // async = SceneManager.LoadSceneAsync("AR2", LoadSceneMode.Additive);
-        const string name = "AR2";
+        const string name = "AR3";
         AsyncOperation _async = new AsyncOperation();
         _async = SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
         _async.allowSceneActivation = true;
@@ -36,8 +36,8 @@ public class ManagerScene : MonoBehaviour
         SceneManager.LoadScene("Home");
     }
 
-    public static void closeSceneAr()
-    {
-        SceneManager.UnloadSceneAsync("AR");
-    }
+    // public static void closeSceneAr()
+    // {
+    //     SceneManager.UnloadSceneAsync("AR");
+    // }
 }
